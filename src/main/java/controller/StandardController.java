@@ -14,6 +14,7 @@ import player.AIPlayer;
 import player.HPlayer;
 import player.IPlayer;
 import player.strategy.Approach;
+import player.strategy.strategies.StrategyWin;
 import player.strategy.strategies.StrategyWinProb;
 import player.strategy.strategies.StrategyWinProbMem;
 
@@ -125,26 +126,38 @@ public class StandardController implements IController {
       }
       String approachStr = new StringBuilder().append(chars[1]).append(chars[2]).append(chars[3])
               .toString();
-      Approach approach = Approach.RANDOM;;
+      String approachString = "ran";
+      Approach approach = Approach.RANDOM;
       switch (approachStr) {
-        case "min" -> approach = Approach.MIN_POINTS;
-        case "max" -> approach = Approach.MAX_TRUMP;
+        case "min" -> {
+          approachString = "min";
+          approach = Approach.MIN_POINTS;
+        }
+        case "max" -> {
+          approachString = "max";
+          approach = Approach.MAX_TRUMP;
+        }
+      }
+      if (chars.length == 5) {
+        players.add(new AIPlayer(approachString + "W", new StrategyWin(approach)));
+        continue;
       }
       if (chars.length == 6) {
-        players.add(new AIPlayer(playerNames.get(i), new StrategyWinProb(approach)));
+        players.add(new AIPlayer(approachString + "WP", new StrategyWinProb(approach)));
         continue;
       }
       if (chars.length == 10) {
-        players.add(new AIPlayer(playerNames.get(i), new StrategyWinProbMem(approach, 100)));
+        players.add(new AIPlayer(approachString + "WPM", new StrategyWinProbMem(approach, 100)));
         continue;
       }
       if (chars.length == 9) {
         int accuracy = Integer.parseInt(new StringBuilder(chars[7]).append(chars[8]).toString());
-        players.add(new AIPlayer(playerNames.get(i), new StrategyWinProbMem(approach, accuracy)));
+        players.add(new AIPlayer(approachString + "WPM" + accuracy,
+                new StrategyWinProbMem(approach, accuracy)));
         continue;
       }
       int accuracy = Integer.parseInt(String.valueOf(chars[7]));
-      players.add(new AIPlayer(playerNames.get(i), new StrategyWinProbMem(approach, accuracy)));
+      players.add(new AIPlayer(approachString + "WPM" + accuracy, new StrategyWinProbMem(approach, accuracy)));
     }
 
     IGame g = new StandardGame(players, new TypeDeck(DeckType.STANDARD));

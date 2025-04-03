@@ -20,6 +20,7 @@ public abstract class APlayer implements IPlayer {
   protected Optional<Card> pondCard; // protected
   protected IDisplay display; // protected
 
+
   /**
    * Creates a new player and sets its name to n.
    * @param n the name
