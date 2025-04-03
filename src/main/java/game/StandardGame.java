@@ -34,6 +34,7 @@ public class StandardGame implements IGame {
   private IPlayer gameWinner;
   private List<Observer> observers;
   private boolean bluesBroken; // TODO: implement
+  public int turn;
 
   /**
    * Constructs a new game with the passed players.
@@ -48,6 +49,7 @@ public class StandardGame implements IGame {
     this.totalGamePoints = 0;
     this.rendState = Optional.empty();
     this.gameWinner = null;
+    this.turn = 0;
     this.observers = new ArrayList<>();
     for (IPlayer p : players) {
       observers.add(p);
@@ -59,6 +61,7 @@ public class StandardGame implements IGame {
   @Override
   public void startRound() {
     resetNewRound();
+    this.turn = 0;
 
     for (int i = 0; i < 5; i++) {
       for (IPlayer p : players) {
@@ -76,6 +79,7 @@ public class StandardGame implements IGame {
 
   @Override
   public void flipWell() {
+    turn += 1;
     if (!well.isEmpty()) {
       throw new IllegalStateException("Cannot flip new well if existing well isn't empty");
     }

@@ -15,6 +15,7 @@ import player.strategy.strategies.StrategyEmpty;
 import player.strategy.strategies.StrategyWin;
 import player.strategy.strategies.StrategyWinProb;
 import player.strategy.strategies.StrategyWinProbMem;
+import player.strategy.strategies.StrategyWinProbMemProf;
 
 public class TestStratWinRates {
   IGame g;
@@ -391,6 +392,20 @@ public class TestStratWinRates {
   }
 
   @Test
+  public void test2minWPM100_2minWPMP100() {
+    players = List.of(
+            new AIPlayer("minWPM100", new StrategyWinProbMem(Approach.MIN_POINTS, 100)),
+            new AIPlayer("minWPM100", new StrategyWinProbMem(Approach.MIN_POINTS, 100)),
+            new AIPlayer("minWPMP100", new StrategyWinProbMemProf(Approach.MIN_POINTS, 100)),
+            new AIPlayer("minWPMP100", new StrategyWinProbMemProf(Approach.MIN_POINTS, 100))
+    );
+    initTests();
+    analyze(100);
+    System.out.println("2WPM100_2WPMP100");
+    printAnalysis(100);
+  }
+
+  @Test
   public void runRandom() {
     test2ranWPM100_2minWPM100(); //# F
     test2maxWPM100_2ranWPM100(); //# G
@@ -420,6 +435,7 @@ public class TestStratWinRates {
 
   //************************************************************************ MOCK CONTROLLER METHODS
   private void run() {
+    System.out.println("Running round " + rounds);
     g.startRound();
     while (!g.roundOver()) {
       turn();
@@ -469,7 +485,7 @@ public class TestStratWinRates {
     nums.add(Math.round((double) rScores[playerIdx] / (double) rounds * 10.0) / 10.0);
     nums.add(Math.round((double) gScores[playerIdx] / gamesPlayed * 10.0) / 10.0);
     nums.add(Math.round((double) pRWins[playerIdx] / (double) rounds * 100.0 * 10.0) / 10.0);
-    nums.add((Math.round(100.00 * (double) pGWins[playerIdx] / (double) gamesPlayed) * 1.00));
+    nums.add(Math.round((double) pGWins[playerIdx] / (double) gamesPlayed * 1000.0) / 10.0);
     return nums;
   }
 }

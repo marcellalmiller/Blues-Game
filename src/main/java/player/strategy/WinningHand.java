@@ -8,7 +8,11 @@ import game.deck.card.SCard;
 import game.deck.card.UCard;
 import utility.Utility;
 
-// TODO: javadoc
+/**
+ * The 57 distinct winning hands, only taking into account the 'Color' and 'Rank' of each card, not
+ *   the 'Suit'. Each 'WinningHand' represents multiple hands of actual cards (its 'permutations'
+ *   field denotes how many).
+ */
 public enum WinningHand {
   // one red four black
   R1_B25(List.of(UCard.R1, UCard.B2, UCard.B3, UCard.B4, UCard.B5), 0, 768),
