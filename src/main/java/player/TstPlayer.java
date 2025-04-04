@@ -251,7 +251,7 @@ public class TstPlayer extends APlayer {
     switch (event) {
       case PLAYER_CHOICE -> {
         StringBuilder sb = new StringBuilder(((IPlayer) data.getFirst()).name() + " chose the " +
-                ((Card) data.get(1)).coloredTS() + " from the " +  data.get(2));
+                ((Card) data.get(1)).ansiTS() + " from the " +  data.get(2));
         sb.append(", 4th list index: ");
         if (data.size() == 3) sb.append("empty");
         else sb.append(((IPlayer) data.get(3)).name());
@@ -259,14 +259,14 @@ public class TstPlayer extends APlayer {
       }
 
       case PLAYER_DISCARD -> dataStrings.add(((IPlayer) data.getFirst()).name()+ " threw the "
-              + ((Card) data.get(1)).coloredTS() + " into the pond");
+              + ((Card) data.get(1)).ansiTS() + " into the pond");
 
       case CARDS_CLEARED -> {
         StringBuilder sb = new StringBuilder();
         if (data.isEmpty()) break;
         for (Object o : data) {
           Card c = (Card) o;
-          sb.append(c.coloredTS()).append(" ");
+          sb.append(c.ansiTS()).append(" ");
         }
         String verb = "were";
         if (data.size() == 1) verb = "was";

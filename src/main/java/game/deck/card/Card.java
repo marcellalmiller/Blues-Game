@@ -68,13 +68,23 @@ public class Card {
   }
 
   /**
-   * Returns toString() with by ANSI color codes corresponding to this card's color - for use in
-   *   instances of StringDisplay.
-   * @return toString() with by ANSI color codes
+   * Returns toString() bookended by ANSI color codes corresponding to this card's color - for use
+   *   in instances of TerminalDisplay.
+   * @return toString() with ANSI color codes
    */
-  public String coloredTS() {
+  public String ansiTS() {
     return card.getSuit().color().ansiColor().getFirst() + this
             + card.getSuit().color().ansiColor().getLast();
+  }
+
+  /**
+   * Returns toString() bookended by HTML color codes corresponding to this card's color - for use
+   *   in instances of TextDisplay.
+   * @return toString() with HTML color codes
+   */
+  public String htmlTS() {
+    return card.getSuit().color().htmlColor().getFirst() + this
+            + card.getSuit().color().htmlColor().getLast();
   }
 
   /**

@@ -5,7 +5,8 @@ import java.util.List;
 import java.util.Objects;
 
 import display.IDisplay;
-import display.StringDisplay;
+import display.TerminalDisplay;
+import display.TextDisplay;
 import game.IGame;
 import game.StandardGame;
 import game.deck.DeckType;
@@ -39,7 +40,7 @@ public class MainController implements IController {
 
   //**************************************************************************************** HELPERS
   private void start() {
-    this.display = new StringDisplay();
+    this.display = new TextDisplay();
     List<IPlayer> players = createPlayers(display.askDifficulty());
     this.game = new StandardGame(players, new TypeDeck(DeckType.STANDARD));
     display.setGame(game, players);

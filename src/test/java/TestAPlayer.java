@@ -6,15 +6,13 @@ import java.util.List;
 import java.util.Optional;
 
 import display.IDisplay;
-import display.StringDisplay;
+import display.TerminalDisplay;
 import game.StandardGame;
 import game.deck.DeckType;
 import game.deck.TypeDeck;
 import game.deck.card.Card;
-import player.AIPlayer;
 import player.HPlayer;
 import player.IPlayer;
-import player.strategy.Approach;
 
 public class TestAPlayer {
   IPlayer hPlayerN; // named HPlayer ("HPlayer")
@@ -73,7 +71,7 @@ public class TestAPlayer {
       p.editName("New name");
       Assert.assertEquals(p.name(), "New name");
 
-      IDisplay display = new StringDisplay(new StandardGame(players,
+      IDisplay display = new TerminalDisplay(new StandardGame(players,
               new TypeDeck(DeckType.STANDARD)), players);
       p.setDisplay(display);
       Assert.assertNotNull(p.getDisplay());

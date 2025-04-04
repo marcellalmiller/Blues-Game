@@ -161,6 +161,32 @@ public class ScoreSheet {
     return sb.toString();
   }
 
+  public String htmlToString() {
+    StringBuilder sb = new StringBuilder();
+
+    sb.append("<html><pre>__________").append("___________".repeat(order.length + 1))
+            .append("<br>|ROUND  |");
+
+    for (int i = 0; i < order.length; i++) {
+      String full = order[i].name();
+      String trimmed = full.length() > 9 ? full.substring(0, 9) : full;
+      sb.append(trimmed).append(" ".repeat(9 - trimmed.length())).append(" |");
+    }
+
+    sb.append("|TOTAL     |<br>|       |").append(" Δ     ∑  |".repeat(order.length))
+            .append("| Δ     ∑  |<br>");
+    sb.append("|-------|").append("----------|".repeat(order.length)).append("|----------|<br>");
+
+    for (RScore r : sheet) {
+      sb.append(r.ssToString()).append("<br>");
+    }
+
+    sb.append("‾‾‾‾‾‾‾‾‾‾").append("‾‾‾‾‾‾‾‾‾‾‾".repeat(order.length + 1));
+    sb.append("</pre></html>");
+
+    return sb.toString();
+  }
+
   //*************************************************************************** GOOD CLASS OVERRIDES
   @Override
   public String toString() {

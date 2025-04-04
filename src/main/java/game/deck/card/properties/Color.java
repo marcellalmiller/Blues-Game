@@ -21,6 +21,17 @@ public enum Color {
   }
 
   /**
+   * Returns a list with this color's start and end HTML codes (start is index 0, end is index 1).
+   */
+  public List<String> htmlColor() {
+    return switch (this) {
+      case RED -> List.of("<font color='#ff0000'>", "</font>");
+      case BLACK -> List.of("<font color='#000000'>", "</font>");
+      case BLUE -> List.of("<font color='#00BFFF'>", "</font>");
+    };
+  }
+
+  /**
    * Returns a list of the suits of this color.
    * @return the suits of this color
    */

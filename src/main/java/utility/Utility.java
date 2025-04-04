@@ -379,140 +379,144 @@ public class Utility {
     }
   }
 
-  public static final String gameRules = """
-              BLUES RULES --------------------------------------------------------------------------
-              Players: 2 - 4
-              Game goal: accumulate the LEAST amount of points throughout the rounds
-              Round goal: get a 5 card sequence - 4 cards of one color, 1 card of another
-               - If the odd colored card is \033[37mblack\033[0m or \033[31mred\033[0m, it must appear at the end or the beginning
-                 of the sequence:
-                 \033[31m1\033[37m 2 3 4 5\033[31m     2\033[37m 3 4 5 6\033[31m     3\033[37m 4 5 6 7     1 2 3 4\033[31m 5\033[37m     2 3 4 5\033[31m 6\033[37m     3 4 5 6\033[31m 7\033[0m
-                 \033[37m1\033[31m 2 3 4 5\033[37m     2\033[31m 3 4 5 6\033[37m     3\033[31m 4 5 6 7     1 2 3 4\033[37m 5\033[31m     2 3 4 5\033[37m 6\033[31m     3 4 5 6\033[37m 7\033[0m
-                 ^ These common hands are worth 0 points
-                 \033[37m1\033[36m 2 3 4 5\033[37m     2\033[36m 3 4 5 6\033[37m     3\033[36m 4 5 6 7     1 2 3 4 \033[37m5\033[36m     2 3 4 5 \033[37m6\033[36m     3 4 5 6 \033[37m7\033[0m
-                 \033[31m1\033[36m 2 3 4 5\033[31m     2\033[36m 3 4 5 6\033[31m     3 \033[36m4 5 6 7     1 2 3 4\033[31m 5\033[36m     2 3 4 5\033[31m 6\033[36m     3 4 5 6\033[31m 7\033[0m
-                 ^ These rare hands are worth -10 points
-               - If the odd colored card is \033[36mblue\033[0m, it may appear anywhere in the sequence:
-                 \033[36m1\033[37m 2 3 4 5     1\033[36m 2\033[37m 3 4 5     1 2 \033[36m3\033[37m 4 5     1 2 3 \033[36m4\033[37m 5     1 2 3 4 \033[36m5\033[0m
-                 \033[36m2\033[37m 3 4 5 6     2 \033[36m3\033[37m 4 5 6     2 3 \033[36m4\033[37m 5 6     2 3 4 \033[36m5\033[37m 6     2 3 4 5 \033[36m6\033[0m
-                 \033[36m3\033[37m 4 5 6 7     3 \033[36m4\033[37m 5 6 7     3 4 \033[36m5\033[37m 6 7     3 4 5 \033[36m6\033[37m 7     3 4 5 6 \033[36m7\033[0m
-                 \033[36m1\033[31m 2 3 4 5     1 \033[36m2\033[31m 3 4 5     1 2 \033[36m3\033[31m 4 5     1 2 3 \033[36m4\033[31m 5     1 2 3 4 \033[36m5\033[0m
-                 \033[36m2\033[31m 3 4 5 6     2 \033[36m3\033[31m 4 5 6     2 3 \033[36m4\033[31m 5 6     2 3 4 \033[36m5\033[31m 6     2 3 4 5 \033[36m6\033[0m
-                 \033[36m3\033[31m 4 5 6 7     3 \033[36m4\033[31m 5 6 7     3 4 \033[36m5\033[31m 6 7     3 4 5 \033[36m6\033[31m 7     3 4 5 6 \033[36m7\033[0m
-                 ^ These common hands are worth -5 points
-               - The ONLY exception to the '4 cards of one color, 1 card of another' rule is a
-                 sequence of five \033[36mblue\033[0m cards:
-                 \033[36m1 2 3 4 5     2 3 4 5 6     3 4 5 6 7\033[0m
-                 ^ These extremely rare hands are worth -25 points
+  public static final String gameRulesAnsi = """
               
-              Cards: a 56 card deck with 8 suits - each suit has numbers 1 through 7
-               - The eight suits are split up into three colors: \033[36mblue\033[0m, \033[37mblack\033[0m, and \033[31mred\033[0m. Each suit
-                 also has a point value - you want the LEAST amount of points.
-                 \033[36mBlue\033[0m suit
-                  - \033[36mBlue\033[0m (\033[36m♦\033[0m) = 0 points
-                 \033[37mBlack\033[0m suits
-                  - \033[37mDash\033[0m (\033[37m~\033[0m) = 1 point
-                  - \033[37mDrop\033[0m (\033[37m⬯\033[0m) = 2 points
-                  - \033[37mHex\033[0m (\033[37m⬡\033[0m) = 3 points
-                  - \033[37mBolt\033[0m (\033[37m≷\033[0m) = 4 points
-                 \033[31mRed\033[0m suits
-                  - \033[31mCross\033[0m (\033[31mx\033[0m) = 5 points
-                  - \033[31mHeart\033[0m (\033[31m♡\033[0m) = 6 points
-                  - \033[31mStar\033[0m (\033[31m⭒\033[0m) = 7 points
-               - Which cards "trump"?
-                  - The most important factor is rank - i.e., the number on the card. A \033[31mred\033[0m/\033[37mblack\033[0m
-                    card 'card1' trumps another \033[31mred\033[0m/\033[37mblack\033[0m card 'card2' if card1 has a lower rank
-                    than card2. For example:
-                     - \033[31m1⭒\033[0m trumps \033[37m2~\033[0m even though \033[31mstar\033[0m (\033[31m⭒\033[0m) has a higher point value than \033[37mdash\033[0m (\033[37m~\033[0m)
-                       because \033[31m1⭒\033[0m's rank (1) is lower than \033[37m2~\033[0m's rank (2)
-                  - Suit comes into play if \033[31mred\033[0m/\033[37mblack\033[0m card 'card1' has the same rank as \033[31mred\033[0m/\033[37mblack\033[0m
-                    card 'card2'. For example:
-                     - \033[37m4≷\033[0m trumps \033[31m4x\033[0m because they have the same rank (4) and suit \033[37mbolt\033[0m (\033[37m≷\033[0m) has a
-                       lower point value than suit \033[31mcross\033[0m (\033[31mx\033[0m)
-                  - However, a \033[36mblue\033[0m card 'card1' of any rank will always trump a \033[31mred\033[0m/\033[37mblack\033[0m 'card2'
-                    of any rank because \033[36mblue\033[0m is the trump suit. For example:
-                     - \033[36m7♦\033[0m trumps \033[37m1~\033[0m even though \033[36m7♦\033[0m has a higher rank (7) than \033[37m1~\033[0m (1) because \033[36mblue\033[0m is
-                       the trump suit
-                  - A \033[36mblue\033[0m card 'card1' trumps another \033[36mblue\033[0m card 'card2' if card1 has a lower rank
-                    than card 2. For example:
-                     - \033[36m3♦\033[0m trumps \033[36m6♦\033[0m because both cards are\033[36m blue\033[0m and \033[36m3♦\033[0m has a lower rank (3) than \033[36m6♦\033[0m
-                       (6)
-              
-              Gameplay:
-              1. Each player is dealt 5 cards
-              2. 4 cards taken from the deck are placed face-up in the middle - called "the well"
-              3. Each player puts a card face-down in front of them - called "the pond"
-              4. Each player has the opportunity to call 'No Blues' on an opponent (explained below)
-              5. Pond cards are flipped over
-              6. The player that threw the best card into the pond (first trump) chooses a card from
-                 the pond OR the well - if they now have a winning hand (see "Round goal" section),
-                 the round ends (explained below in "Round endings" section)
-              7. The player that threw the second best card into the pond (second trump) chooses a
-                 card from the pond OR the well - if they now have a winning hand, the round ends
-              8. The well cards are removed; if there are only two players, the pond cards are
-                 removed and steps 9 and 10 are skipped
-              9. Third trump chooses a card from the pond - if they now have a winning hand, the
-                 round ends; if there are only three players, pond cards are removed and step 10 is
-                 skipped
-              10.Fourth trump chooses a card from the pond - if they now have a winning hand, the
-                 round ends; else, pond cards are removed
-              11.Steps 2 - 10 are repeated until: a player "calls Blues" (gets a winning hand),
-                 "calls No Blues", or the deck has less than 4 cards and a full well cannot be dealt
-                 for the next turn (these endings are explained below in "Round endings")
-              12.Points are tallied and added to the score sheet (explained below in "Points")
-              13.Steps 1 - 12 are repeated until the game is over - i.e. when players' cumulative
-                 points ("game points") reach a certain threshold (explained below in "Game ending")
-              
-              Round endings:
-              - 'Blues' calls
-                  - A 'Blues' call asserts that the caller has obtained a winning hand; the most
-                    common round ending by far
-                  - 'Blues' calls are not explicitly made in the digital version of this game - the
-                    program will detect if a player has a winning hand and end the game
-               - 'No Blues' calls
-                  - During each turn in a round, after the pond is placed but before it is flipped,
-                    all players may call 'No Blues' on an opponent or pass
-                     - If multiple players call 'No Blues' the same turn, the player with the best
-                       card (including their pond card) may go through with their call
-                  - A 'No Blues' call accuses the receiver of being able to call 'Blues' after
-                    choosing a card during the current turn
-                  - If a 'No Blues' call is made, the round ends, the pond is flipped, and the
-                    receiver reveals their cards
-                     - If they threw first or second trump, well and pond cards are considered, if
-                       not, only pond cards are considered
-                     - If adding any one of the considered cards to the receiver's hand gives them
-                       a winning hand, the call is true; otherwise, the call is false
-               - Empty deck
-                  - If the deck has less than 4 cards after a turn has finished the game ends
-                    because there aren't enough cards to deal a full well
-              
-              Points:
-               - To tally "hand points", the point value of each suit that appears in the hand is
-                 added once, regardless of how many times the suit appears in the hand. For example:
-                     - \033[37m1~ 2~ 5~ 6~\033[31m 6♡\033[0m = \033[37m~\033[0m (1 point) + \033[31m♡\033[0m (6 points)                 = 7 points
-                     - \033[31m1♡ 2♡ 5♡ 6♡ \033[37m6~\033[0m = \033[31m♡\033[0m (6 points) + \033[37m~\033[0m (1 point)                 = 7 points
-                     - \033[37m6~ 6⬯ 7~ 7⬯ 7≷\033[0m = \033[37m~\033[0m (1 point) + \033[37m⬯\033[0m (2 points) + \033[37m≷\033[0m (4 points)  = 7 points
-                     - \033[31m1⭒\033[36m 2♦ \033[31m3⭒ 4⭒ 6⭒\033[0m = \033[31m⭒\033[0m (7 points) + \033[36m♦\033[0m (0 points)               = 7 points
-                     - The most points a single hand can contain is 25: \033[37m⬡\033[0m (3 points), \033[37m≷\033[0m (4 points),
-                       \033[31mx\033[0m (5 points), \033[31m♡\033[0m (6 points), \033[31m⭒\033[0m (7 points), the least is 0: all \033[36m♦\033[0m (0 points)
-               - If a round ends with a 'Blues' call, the caller gains the points associated with
-                 their winning hand (see "Round goal" section above), all other players gain their
-                 hand points
-               - If a round ends with a true 'No Blues' call, the caller gains -25 points, the
-                 receiver gains 25 points, all other players gain their hand points
-               - If a round ends with a false 'No Blues' call, the caller gains 25 points, all other
-                 players gain 0 points
-               - If the round ends because of an empty deck, all players gain their hand points
-              
-              Game ending:
-               - The game ends when players' cumulative points ("game points") reach a certain
-                 threshold
-                  - Usually this threshold equals 25 times the number of players (50 for 2 players,
-                    75 for 3 players, 100 for 4 players)
-                  - After every round, each player's points (see "Points" section above) are added
-                    to their game total - all players' game totals are added to calculate the game
-                    points
-               - The winner is whichever player has the least total points - ties for least total
-                 points go to the player who most recently won a round
               """;
+
+  public static final String gameRulesHTML = """
+          <html><pre>BLUES RULES<br>
+              Players: 2 - 4<br>
+              Game goal: accumulate the LEAST amount of points throughout the rounds<br>
+              Round goal: get a 5 card sequence - 4 cards of one color, 1 card of another<br>
+               - If the odd colored card is <font color='#000000'>black</font> or <font color='#ff0000'>red</font>, it must appear at the end or the beginning<br>
+                 of the sequence:<br>
+                 <font color='#ff0000'>1<font color='#000000'> 2 3 4 5<font color='#ff0000'>     2<font color='#000000'> 3 4 5 6<font color='#ff0000'>     3<font color='#000000'> 4 5 6 7     1 2 3 4<font color='#ff0000'> 5<font color='#000000'>     2 3 4 5<font color='#ff0000'> 6<font color='#000000'>     3 4 5 6<font color='#ff0000'> 7</font><br>
+                 <font color='#000000'>1<font color='#ff0000'> 2 3 4 5<font color='#000000'>     2<font color='#ff0000'> 3 4 5 6<font color='#000000'>     3<font color='#ff0000'> 4 5 6 7     1 2 3 4<font color='#000000'> 5<font color='#ff0000'>     2 3 4 5<font color='#000000'> 6<font color='#ff0000'>     3 4 5 6<font color='#000000'> 7</font><br>
+                 ^ These common hands are worth 0 points<br>
+                 <font color='#000000'>1<font color='#00BFFF'> 2 3 4 5<font color='#000000'>     2<font color='#00BFFF'> 3 4 5 6<font color='#000000'>     3<font color='#00BFFF'> 4 5 6 7     1 2 3 4 <font color='#000000'>5<font color='#00BFFF'>     2 3 4 5 <font color='#000000'>6<font color='#00BFFF'>     3 4 5 6 <font color='#000000'>7</font><br>
+                 <font color='#ff0000'>1<font color='#00BFFF'> 2 3 4 5<font color='#ff0000'>     2<font color='#00BFFF'> 3 4 5 6<font color='#ff0000'>     3 <font color='#00BFFF'>4 5 6 7     1 2 3 4<font color='#ff0000'> 5<font color='#00BFFF'>     2 3 4 5<font color='#ff0000'> 6<font color='#00BFFF'>     3 4 5 6<font color='#ff0000'> 7</font><br>
+                 ^ These rare hands are worth -10 points<br>
+               - If the odd colored card is <font color='#00BFFF'>blue</font>, it may appear anywhere in the sequence:<br>
+                 <font color='#00BFFF'>1<font color='#000000'> 2 3 4 5     1<font color='#00BFFF'> 2<font color='#000000'> 3 4 5     1 2 <font color='#00BFFF'>3<font color='#000000'> 4 5     1 2 3 <font color='#00BFFF'>4<font color='#000000'> 5     1 2 3 4 <font color='#00BFFF'>5</font><br>
+                 <font color='#00BFFF'>2<font color='#000000'> 3 4 5 6     2 <font color='#00BFFF'>3<font color='#000000'> 4 5 6     2 3 <font color='#00BFFF'>4<font color='#000000'> 5 6     2 3 4 <font color='#00BFFF'>5<font color='#000000'> 6     2 3 4 5 <font color='#00BFFF'>6</font><br>
+                 <font color='#00BFFF'>3<font color='#000000'> 4 5 6 7     3 <font color='#00BFFF'>4<font color='#000000'> 5 6 7     3 4 <font color='#00BFFF'>5<font color='#000000'> 6 7     3 4 5 <font color='#00BFFF'>6<font color='#000000'> 7     3 4 5 6 <font color='#00BFFF'>7</font><br>
+                 <font color='#00BFFF'>1<font color='#ff0000'> 2 3 4 5     1 <font color='#00BFFF'>2<font color='#ff0000'> 3 4 5     1 2 <font color='#00BFFF'>3<font color='#ff0000'> 4 5     1 2 3 <font color='#00BFFF'>4<font color='#ff0000'> 5     1 2 3 4 <font color='#00BFFF'>5</font><br>
+                 <font color='#00BFFF'>2<font color='#ff0000'> 3 4 5 6     2 <font color='#00BFFF'>3<font color='#ff0000'> 4 5 6     2 3 <font color='#00BFFF'>4<font color='#ff0000'> 5 6     2 3 4 <font color='#00BFFF'>5<font color='#ff0000'> 6     2 3 4 5 <font color='#00BFFF'>6</font><br>
+                 <font color='#00BFFF'>3<font color='#ff0000'> 4 5 6 7     3 <font color='#00BFFF'>4<font color='#ff0000'> 5 6 7     3 4 <font color='#00BFFF'>5<font color='#ff0000'> 6 7     3 4 5 <font color='#00BFFF'>6<font color='#ff0000'> 7     3 4 5 6 <font color='#00BFFF'>7</font><br>
+                 ^ These common hands are worth -5 points<br>
+               - The ONLY exception to the '4 cards of one color, 1 card of another' rule is a<br>
+                 sequence of five <font color='#00BFFF'>blue</font> cards:<br>
+                 <font color='#00BFFF'>1 2 3 4 5     2 3 4 5 6     3 4 5 6 7</font><br>
+                 ^ These extremely rare hands are worth -25 points<br>
+          <br>
+              Cards: a 56 card deck with 8 suits - each suit has numbers 1 through 7<br>
+               - The eight suits are split up into three colors: <font color='#00BFFF'>blue</font>, <font color='#000000'>black</font>, and <font color='#ff0000'>red</font>. Each suit<br>
+                 also has a point value - you want the LEAST amount of points.<br>
+                 <font color='#00BFFF'>Blue</font> suit<br>
+                  - <font color='#00BFFF'>Blue</font> (<font color='#00BFFF'>♦</font>) = 0 points<br>
+                 <font color='#000000'>Black</font> suits<br>
+                  - <font color='#000000'>Dash</font> (<font color='#000000'>~</font>) = 1 point<br>
+                  - <font color='#000000'>Drop</font> (<font color='#000000'>⬯</font>) = 2 points<br>
+                  - <font color='#000000'>Hex</font> (<font color='#000000'>⬡</font>) = 3 points<br>
+                  - <font color='#000000'>Bolt</font> (<font color='#000000'>≷</font>) = 4 points<br>
+                 <font color='#ff0000'>Red</font> suits<br>
+                  - <font color='#ff0000'>Cross</font> (<font color='#ff0000'>x</font>) = 5 points<br>
+                  - <font color='#ff0000'>Heart</font> (<font color='#ff0000'>♡</font>) = 6 points<br>
+                  - <font color='#ff0000'>Star</font> (<font color='#ff0000'>⭒</font>) = 7 points<br>
+               - Which cards "trump"?<br>
+                  - The most important factor is rank - i.e., the number on the card. A <font color='#ff0000'>red</font>/<font color='#000000'>black</font><br>
+                    card 'card1' trumps another <font color='#ff0000'>red</font>/<font color='#000000'>black</font> card 'card2' if card1 has a lower rank<br>
+                    than card2. For example:<br>
+                     - <font color='#ff0000'>1⭒</font> trumps <font color='#000000'>2~</font> even though <font color='#ff0000'>star</font> (<font color='#ff0000'>⭒</font>) has a higher point value than <font color='#000000'>dash</font> (<font color='#000000'>~</font>)<br>
+                       because <font color='#ff0000'>1⭒</font>'s rank (1) is lower than <font color='#000000'>2~</font>'s rank (2)<br>
+                  - Suit comes into play if <font color='#ff0000'>red</font>/<font color='#000000'>black</font> card 'card1' has the same rank as <font color='#ff0000'>red</font>/<font color='#000000'>black</font><br>
+                    card 'card2'. For example:<br>
+                     - <font color='#000000'>4≷</font> trumps <font color='#ff0000'>4x</font> because they have the same rank (4) and suit <font color='#000000'>bolt</font> (<font color='#000000'>≷</font>) has a<br>
+                       lower point value than suit <font color='#ff0000'>cross</font> (<font color='#ff0000'>x</font>)<br>
+                  - However, a <font color='#00BFFF'>blue</font> card 'card1' of any rank will always trump a <font color='#ff0000'>red</font>/<font color='#000000'>black</font> 'card2'<br>
+                    of any rank because <font color='#00BFFF'>blue</font> is the trump suit. For example:<br>
+                     - <font color='#00BFFF'>7♦</font> trumps <font color='#000000'>1~</font> even though <font color='#00BFFF'>7♦</font> has a higher rank (7) than <font color='#000000'>1~</font> (1) because <font color='#00BFFF'>blue</font> is<br>
+                       the trump suit<br>
+                  - A <font color='#00BFFF'>blue</font> card 'card1' trumps another <font color='#00BFFF'>blue</font> card 'card2' if card1 has a lower rank<br>
+                    than card 2. For example:<br>
+                     - <font color='#00BFFF'>3♦</font> trumps <font color='#00BFFF'>6♦</font> because both cards are<font color='#00BFFF'> blue</font> and <font color='#00BFFF'>3♦</font> has a lower rank (3) than <font color='#00BFFF'>6♦</font><br>
+                       (6)<br>
+          
+              Gameplay:<br>
+              1. Each player is dealt 5 cards<br>
+              2. 4 cards taken from the deck are placed face-up in the middle - called "the well"<br>
+              3. Each player puts a card face-down in front of them - called "the pond"<br>
+              4. Each player has the opportunity to call 'No Blues' on an opponent (explained below)<br>
+              5. Pond cards are flipped over<br>
+              6. The player that threw the best card into the pond (first trump) chooses a card from<br>
+                 the pond OR the well - if they now have a winning hand (see "Round goal" section),<br>
+                 the round ends (explained below in "Round endings" section)<br>
+              7. The player that threw the second best card into the pond (second trump) chooses a<br>
+                 card from the pond OR the well - if they now have a winning hand, the round ends<br>
+              8. The well cards are removed; if there are only two players, the pond cards are<br>
+                 removed and steps 9 and 10 are skipped<br>
+              9. Third trump chooses a card from the pond - if they now have a winning hand, the<br>
+                 round ends; if there are only three players, pond cards are removed and step 10 is<br>
+                 skipped<br>
+              10.Fourth trump chooses a card from the pond - if they now have a winning hand, the<br>
+                 round ends; else, pond cards are removed<br>
+              11.Steps 2 - 10 are repeated until: a player "calls Blues" (gets a winning hand),<br>
+                 "calls No Blues", or the deck has less than 4 cards and a full well cannot be dealt<br>
+                 for the next turn (these endings are explained below in "Round endings")<br>
+              12.Points are tallied and added to the score sheet (explained below in "Points")<br>
+              13.Steps 1 - 12 are repeated until the game is over - i.e. when players' cumulative<br>
+                 points ("game points") reach a certain threshold (explained below in "Game ending")<br>
+          <br>
+              Round endings:<br>
+              - 'Blues' calls<br>
+                  - A 'Blues' call asserts that the caller has obtained a winning hand; the most<br>
+                    common round ending by far<br>
+                  - 'Blues' calls are not explicitly made in the digital version of this game - the<br>
+                    program will detect if a player has a winning hand and end the game<br>
+               - 'No Blues' calls<br>
+                  - During each turn in a round, after the pond is placed but before it is flipped,<br>
+                    all players may call 'No Blues' on an opponent or pass<br>
+                     - If multiple players call 'No Blues' the same turn, the player with the best<br>
+                       card (including their pond card) may go through with their call<br>
+                  - A 'No Blues' call accuses the receiver of being able to call 'Blues' after<br>
+                    choosing a card during the current turn<br>
+                  - If a 'No Blues' call is made, the round ends, the pond is flipped, and the<br>
+                    receiver reveals their cards<br>
+                     - If they threw first or second trump, well and pond cards are considered, if<br>
+                       not, only pond cards are considered<br>
+                     - If adding any one of the considered cards to the receiver's hand gives them<br>
+                       a winning hand, the call is true; otherwise, the call is false<br>
+               - Empty deck<br>
+                  - If the deck has less than 4 cards after a turn has finished the game ends<br>
+                    because there aren't enough cards to deal a full well<br>
+          <br>
+              Points:<br>
+               - To tally "hand points", the point value of each suit that appears in the hand is<br>
+                 added once, regardless of how many times the suit appears in the hand. For example:<br>
+                     - <font color='#000000'>1~ 2~ 5~ 6~<font color='#ff0000'> 6♡</font> = <font color='#000000'>~</font> (1 point) + <font color='#ff0000'>♡</font> (6 points)                 = 7 points<br>
+                     - <font color='#ff0000'>1♡ 2♡ 5♡ 6♡ <font color='#000000'>6~</font> = <font color='#ff0000'>♡</font> (6 points) + <font color='#000000'>~</font> (1 point)                 = 7 points<br>
+                     - <font color='#000000'>6~ 6⬯ 7~ 7⬯ 7≷</font> = <font color='#000000'>~</font> (1 point) + <font color='#000000'>⬯</font> (2 points) + <font color='#000000'>≷</font> (4 points)  = 7 points<br>
+                     - <font color='#ff0000'>1⭒<font color='#00BFFF'> 2♦ <font color='#ff0000'>3⭒ 4⭒ 6⭒</font> = <font color='#ff0000'>⭒</font> (7 points) + <font color='#00BFFF'>♦</font> (0 points)               = 7 points<br>
+                     - The most points a single hand can contain is 25: <font color='#000000'>⬡</font> (3 points), <font color='#000000'>≷</font> (4 points),<br>
+                       <font color='#ff0000'>x</font> (5 points), <font color='#ff0000'>♡</font> (6 points), <font color='#ff0000'>⭒</font> (7 points), the least is 0: all <font color='#00BFFF'>♦</font> (0 points)<br>
+               - If a round ends with a 'Blues' call, the caller gains the points associated with<br>
+                 their winning hand (see "Round goal" section above), all other players gain their<br>
+                 hand points<br>
+               - If a round ends with a true 'No Blues' call, the caller gains -25 points, the<br>
+                 receiver gains 25 points, all other players gain their hand points<br>
+               - If a round ends with a false 'No Blues' call, the caller gains 25 points, all other<br>
+                 players gain 0 points<br>
+               - If the round ends because of an empty deck, all players gain their hand points<br>
+          <br>
+              Game ending:<br>
+               - The game ends when players' cumulative points ("game points") reach a certain<br>
+                 threshold<br>
+                  - Usually this threshold equals 25 times the number of players (50 for 2 players,<br>
+                    75 for 3 players, 100 for 4 players)<br>
+                  - After every round, each player's points (see "Points" section above) are added<br>
+                    to their game total - all players' game totals are added to calculate the game<br>
+                    points<br>
+               - The winner is whichever player has the least total points - ties for least total<br>
+                 points go to the player who most recently won a round<br>
+          """;
 }

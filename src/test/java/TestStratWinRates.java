@@ -436,20 +436,6 @@ public class TestStratWinRates {
   }
 
   @Test
-  public void test2minWPM100_2minWPMP100() {
-    players = List.of(
-            new AIPlayer("minWPM100", new StrategyWinProbMem(Approach.MIN_POINTS, 100)),
-            new AIPlayer("minWPM100", new StrategyWinProbMem(Approach.MIN_POINTS, 100)),
-            new AIPlayer("minWPMP100", new StrategyWinProbMemProf(Approach.MIN_POINTS, 100)),
-            new AIPlayer("minWPMP100", new StrategyWinProbMemProf(Approach.MIN_POINTS, 100))
-    );
-    initTests();
-    analyze(sampleSize);
-    System.out.println("2WPM100_2WPMP100");
-    printAnalysis(sampleSize);
-  }
-
-  @Test
   public void runRandom() {
     test2ranWPM100_2minWPM100(); //# F
     test2maxWPM100_2ranWPM100(); //# G

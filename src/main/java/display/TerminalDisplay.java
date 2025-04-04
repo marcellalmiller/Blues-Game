@@ -6,7 +6,6 @@ import java.util.Optional;
 import java.util.Scanner;
 
 import game.IGame;
-import game.StandardGame;
 import game.deck.card.Card;
 import game.deck.card.properties.Position;
 import game.observer.Observer;
@@ -19,7 +18,7 @@ import utility.Utility;
  * A String display for a 4 player game of Blues. Displays by printing to the terminal, gets
  *   feedback with a Scanner.
  */
-public class StringDisplay implements IDisplay, Observer {
+public class TerminalDisplay implements IDisplay, Observer {
   private ArrayList<IPlayer> opponents;
   private IPlayer player;
   private ArrayList<IPlayer> allPlayers;
@@ -30,7 +29,7 @@ public class StringDisplay implements IDisplay, Observer {
    * Creates an empty String display for a game of Blues. Fields must be set using 'setGame' before
    *   a game can be played.
    */
-  public StringDisplay() {
+  public TerminalDisplay() {
     this.scanner = new Scanner(System.in);
   }
 
@@ -40,7 +39,7 @@ public class StringDisplay implements IDisplay, Observer {
    * @param game the game to display
    * @param players the players
    */
-  public StringDisplay(IGame game, List<IPlayer> players) {
+  public TerminalDisplay(IGame game, List<IPlayer> players) {
     this.scanner = new Scanner(System.in);
     setGame(game, players);
   }
@@ -225,17 +224,17 @@ public class StringDisplay implements IDisplay, Observer {
     switch (event) {
       case PLAYER_CHOICE -> {
         System.out.println("\033[33m" + ((IPlayer) data.getFirst()).name() + " chose " +
-                ((Card) data.get(1)).coloredTS() + "\033[33m from the " + data.get(2) + "\033[0m");
+                ((Card) data.get(1)).ansiTS() + "\033[33m from the " + data.get(2) + "\033[0m");
         if (data.size() > 5 && data.get(5).equals(player)) renderTable();
       }
       case PLAYER_DISCARD -> System.out.println("\033[33m" + ((IPlayer) data.getFirst()).name()
-              + " threw the " + ((Card) data.get(1)).coloredTS() + "\033[33m into the pond\033[0m");
+              + " threw the " + ((Card) data.get(1)).ansiTS() + "\033[33m into the pond\033[0m");
       case CARDS_CLEARED -> {
         StringBuilder sb = new StringBuilder();
         if (data.isEmpty()) break;
         for (Object o : data) {
           Card c = (Card) o;
-          sb.append(c.coloredTS()).append(" ");
+          sb.append(c.ansiTS()).append(" ");
         }
         String verb = "\033[33mwere";
         if (data.size() == 1) verb = "\033[33mwas";
@@ -262,7 +261,7 @@ public class StringDisplay implements IDisplay, Observer {
 
     sb.append(" called 'Blues' and won the round with this hand: ");
     for (Card c : Utility.sortHandByRank(w.getHand())) {
-      sb.append(c.coloredTS()).append(" ");
+      sb.append(c.ansiTS()).append(" ");
     }
 
     return sb.toString();
@@ -288,7 +287,7 @@ public class StringDisplay implements IDisplay, Observer {
             .append("by taking the ");
 
     Card fifthCard = Utility.noBlues5thCard(game.getPond(), game.getWell(), l.getHand());
-    sb.append(fifthCard.coloredTS()).append(" from the ");
+    sb.append(fifthCard.ansiTS()).append(" from the ");
     if (game.getPond().contains(fifthCard)) sb.append("pond");
     else if (game.getWell().contains(fifthCard)) sb.append("well");
     else {
@@ -298,7 +297,7 @@ public class StringDisplay implements IDisplay, Observer {
 
     sb.append(" and adding it to this hand: ");
     for (Card c : Utility.sortHandByRank(l.getHand())) {
-      sb.append(c.coloredTS()).append(" ");
+      sb.append(c.ansiTS()).append(" ");
     }
     return sb.toString();
   }
@@ -336,7 +335,7 @@ public class StringDisplay implements IDisplay, Observer {
     StringBuilder sb = new StringBuilder();
 
     for (int i = 0; i < cards.size(); i++) {
-      sb.append(charIdx.get(i)).append(": ").append(cards.get(i).coloredTS());
+      sb.append(charIdx.get(i)).append(": ").append(cards.get(i).ansiTS());
       if (i != cards.size() - 1) sb.append("\n");
     }
 
@@ -437,7 +436,7 @@ public class StringDisplay implements IDisplay, Observer {
               'scores' -> display current scores
               'name' -> change your display name
               """);
-      case "rule", "rules" -> System.out.println("\n" + Utility.gameRules);
+      case "rule", "rules" -> System.out.println("\n" + Utility.gameRulesAnsi);
       case "scores", "score", "scoresheet", "score sheet" -> {
         if (game.getScoreSheet().getCurrentRound() == 1)
           System.out.println("\nNo scores to display yet!\n");
@@ -481,16 +480,16 @@ public class StringDisplay implements IDisplay, Observer {
 
     if (ph.size() < 4) for (int i = 0; i < 5; i++) hs[i] = "X ";
     if (ph.size() > 3) {
-      hs[0] = ph.get(0).coloredTS();
-      hs[1] = ph.get(1).coloredTS();
+      hs[0] = ph.get(0).ansiTS();
+      hs[1] = ph.get(1).ansiTS();
       if (ph.size() == 4) {
         hs[2] = "  "; // empty slot
-        hs[3] = ph.get(2).coloredTS();
-        hs[4] = ph.get(3).coloredTS();
+        hs[3] = ph.get(2).ansiTS();
+        hs[4] = ph.get(3).ansiTS();
       } else {
-        hs[2] = ph.get(2).coloredTS();
-        hs[3] = ph.get(3).coloredTS();
-        hs[4] = ph.get(4).coloredTS();
+        hs[2] = ph.get(2).ansiTS();
+        hs[3] = ph.get(3).ansiTS();
+        hs[4] = ph.get(4).ansiTS();
       }
     }
 
@@ -517,8 +516,8 @@ public class StringDisplay implements IDisplay, Observer {
         Card c = p.getPondCard().get();
         if (c.getPosition().equals(Position.POND_F)) {
           if (i != 1) {
-            pondStrings[i] = c.coloredTS() + " ";
-          } else pondStrings[i] = " " + c.coloredTS();
+            pondStrings[i] = c.ansiTS() + " ";
+          } else pondStrings[i] = " " + c.ansiTS();
         } else {
           pondStrings[i] = " ▯ ";
         }
@@ -541,7 +540,7 @@ public class StringDisplay implements IDisplay, Observer {
     String[] wellStrings = new String[4];
     for (int i = 0; i < 4; i++) {
       if (i + 1 <= game.getWell().size()) {
-        wellStrings[i] = game.getWell().get(i).coloredTS();
+        wellStrings[i] = game.getWell().get(i).ansiTS();
       } else {
         wellStrings[i] = "  "; // empty slot
       }
@@ -614,13 +613,13 @@ public class StringDisplay implements IDisplay, Observer {
     if (other == null || getClass() != other.getClass()) {
       return false;
     }
-    StringDisplay o = (StringDisplay) other;
+    TerminalDisplay o = (TerminalDisplay) other;
     return o.toString().equals(toString());
   }
 
   /**
    * Doesn't hash fields because it creates an infinite loop - APlayer's hashCode() method calls
-   *   StringDisplay's hashCode() method which calls APlayer's hashCode() method, etc. etc.
+   *   TerminalDisplay's hashCode() method which calls APlayer's hashCode() method, etc. etc.
    */
   @Override
   public int hashCode() {

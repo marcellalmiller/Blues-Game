@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Objects;
 
 import display.IDisplay;
-import display.StringDisplay;
+import display.TerminalDisplay;
 import game.IGame;
 import game.StandardGame;
 import game.deck.DeckType;
@@ -158,7 +158,7 @@ public class TstController {
     }
 
     IGame g = new StandardGame(players, new TypeDeck(DeckType.STANDARD));
-    IDisplay d = new StringDisplay(g, players);
+    IDisplay d = new TerminalDisplay(g, players);
     TstController c = new TstController(g, d);
     System.setIn(System.in);
 
