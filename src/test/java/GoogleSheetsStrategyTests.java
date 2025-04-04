@@ -37,7 +37,7 @@ public class GoogleSheetsStrategyTests {
   int games;
 
   public static List<String> possiblePlayers;
-  private Random random = new Random();
+  private final Random random = new Random();
   private static int uniqueCodeLength = 8;
 
   public static int numberOfSamples = 100;

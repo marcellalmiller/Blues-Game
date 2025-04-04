@@ -1,4 +1,4 @@
-package player.strategy;
+package player.strategy.strategies;
 
 import java.util.List;
 import java.util.Optional;

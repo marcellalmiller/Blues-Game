@@ -34,7 +34,7 @@ public class StringDisplay implements IDisplay, Observer {
    */
   public StringDisplay(IGame game, List<IPlayer> players) {
     this.game = game;
-    ((StandardGame) game).addObserver(this); // TODO: fix messy logic
+    ((StandardGame) game).addObserver(this);
     this.player = players.getFirst();
     this.allPlayers = new ArrayList<>(players);
     player.setDisplay(this);

@@ -125,30 +125,42 @@ public enum UCard {
     return uCards;
   }
 
-  @Override
-  public String toString() {
-    return color.toString() + " " + rank.toString();
+  /**
+   * Returns this UCard's Color.
+   * @return this UCard's Color
+   */
+  public Color color() {
+    return color;
+  }
+
+  /**
+   * Returns this UCard's Rank.
+   * @return this UCard's Rank
+   */
+  public Rank rank() {
+    return rank;
+  }
+
+  /**
+   * Returns the suited cards (SCards) that this UCard represents.
+   * @return the SCards this represents
+   */
+  public List<SCard> cards() {
+    return cards;
   }
 
   private final Rank rank;
   private final Color color;
   private final List<SCard> cards;
 
-  public Color color() {
-    return color;
-  }
-
-  public Rank rank() {
-    return rank;
-  }
-
-  public List<SCard> cards() {
-    return cards;
-  }
-
   UCard(Color c, Rank r, List<SCard> cards) {
     this.rank = r;
     this.color = c;
     this.cards = cards;
+  }
+
+  @Override
+  public String toString() {
+    return color.toString() + " " + rank.toString();
   }
 }

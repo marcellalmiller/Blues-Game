@@ -3,7 +3,6 @@ package player.strategy.strategies;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 
 import game.deck.card.Card;
@@ -13,112 +12,77 @@ import game.deck.card.properties.Color;
 import player.IPlayer;
 import player.strategy.Approach;
 import player.strategy.IMemory;
-import player.strategy.IStrategy;
 import player.strategy.WinningHand;
 
-// TODO: javadoc
-public class StrategyWinProbMem implements IStrategy, IMemory {
-  private final Approach approach;
+/**
+ *
+ */
+public class StrategyWinProbMem extends AStrategyWin implements IMemory {
   private final int accuracy;
   private List<Card> discarded;
   private List<WinningHand> pursuableWHs;
 
-  // TODO: javadoc
   public StrategyWinProbMem(Approach approach, int memoryAccuracyPercentage) {
-    this.approach = approach;
+    super(approach);
     this.accuracy = memoryAccuracyPercentage;
     resetNewRound();
   }
 
-  // TODO: javadoc
   @Override
   public void resetNewRound() {
     discarded = new ArrayList<>();
-    pursuableWHs = new ArrayList<>();
+    super.resetNewRound();
   }
 
-  // TODO: implement, javadoc
-  @Override
-  public Card recommendedDiscard(List<Card> hand, List<Card> well) {
-    getPursuableWHs(hand);
-    if (pursuableWHs.isEmpty()) return approach.recDiscard(hand).getFirst();
-
-    List<Card> discIfDesired = WinningHand.discardIfDesired(pursuableWHs.getFirst(), hand);
-
-    for (Card c : approach.recDiscard(hand)) {
-      if (discIfDesired.contains(c)) return c;
-    }
-
-    return approach.recDiscard(discIfDesired).getFirst();
-  }
-
-  // TODO: implement, javadoc
-  @Override
-  public Card recommendedChoose(List<Card> hand, List<Card> pond, List<Card> well) {
-    getPursuableWHs(hand);
-    if (pursuableWHs.isEmpty()) return approach.recChoose(hand, well, pond).getFirst();
-
-    List<Card> wend = new ArrayList<>(well);
-    wend.addAll(pond);
-
-    List<Card> helpful = new ArrayList<>();
-    for (Card c : wend) {
-      if (WinningHand.helps(pursuableWHs.getFirst(), hand, c)) helpful.add(c);
-    }
-
-    for (Card c : approach.recChoose(hand, well, pond)) {
-      if (helpful.contains(c)) return c;
-    }
-
-    return approach.recChoose(hand, pond, well).getFirst();
-  }
-
-  // TODO: implement, javadoc
-  @Override
-  public Optional<IPlayer> recommendedCall(List<IPlayer> opponents, List<Card> well) {
-    //Random r = new Random();
-    //if (approach.equals(Approach.RANDOM) && r.nextInt(0, 101) % 100 == 0) {
-    //  return Optional.of(opponents.get(r.nextInt(0, opponents.size())));
-    //}
-    //else if (r.nextInt(0, 501) % 500 == 0) {
-    //  return Optional.of(opponents.get(r.nextInt(0, opponents.size())));
-    //}
-    return Optional.empty();
-  }
-
-  // TODO: javadoc
   @Override
   public void notifyOfPlayerDiscard(IPlayer p, Card c, List<Card> well) {
     if (new Random().nextInt(0, 100) <= accuracy) discarded.remove(c);
   }
 
-  // TODO: javadoc
+  /**
+   * Notifies this strategy of an EventType.PLAYER_CHOICE. If a random int between zero and 100 is
+   *   less than or equal to 'accuracy', Card 'c' is added to 'discarded'. Else nothing.
+   * @param p the IPlayer who chose Card c
+   * @param c the Card that was chosen
+   * @param location where Card c was chosen from
+   * @param well the current well
+   * @param pond the current pond
+   */
   @Override
   public void notifyOfPlayerChoice(IPlayer p, Card c, String location, List<Card> well,
                                    List<Card> pond) {
     if (new Random().nextInt(0, 100) <= accuracy) discarded.add(c);
   }
 
-  // TODO: javadoc
+  /**
+   * Notifies this strategy of an EventType.CARDS_CLEARED. If a random int between zero and 100 is
+   *   less than or equal to 'accuracy', Card 'c' is added to 'discarded'. Else nothing.
+   * @param cards the Cards cleared
+   */
   @Override
   public void notifyOfCardsCleared(List<Card> cards) {
     if (new Random().nextInt(0, 100) <= accuracy) discarded.addAll(cards);
   }
 
-  //******************************************************************************* GETBLUES HELPERS
-  // TODO: javadoc
-  // TODO: also sort by strength of betting cards ?
-  private void getPursuableWHs(List<Card> hand) {
-    // if cards away from closest WHs is > 2 return, else get closest to
+  /**
+   * If 'pursuableWHs' isn't empty, calls 'refreshPursuableWHs' method in superclass and returns.
+   *   Else calls static method 'closestTo()' in 'WinningHand' to get a list of all 'WinningHand's
+   *   the current hand is closest to. If the closest WinningHand is more than 2 cards away,
+   *   returns. Else identifies all the 'WinningHand's returned by 'closestTo' that have blue cards,
+   *   calls 'notPursuableWithBlues()' with them, and removes the results from 'pursuableWHs'.
+   *   Removes any 'WinningHand's whose Cards are all in 'discarded' from 'pursuableWHs'. Calls
+   *   'sortPursuableWHs()' and returns.
+   * @param hand the current hand
+   */
+  void getPursuableWHs(List<Card> hand) {
     if (!pursuableWHs.isEmpty()) {
-      refreshPursuable(hand);
+      super.refreshPursuableWHs(hand);
       return;
     }
 
     if (WinningHand.cardsAwayFromClosestTo(hand) > 2) return;
     List<WinningHand> closestTo = WinningHand.closestTo(hand);
 
-    // get all the WHs that have blues and remove any that are impossible to obtain
     List<WinningHand> hasBlues = new ArrayList<>();
     List<UCard> blues = List.of(UCard.A1, UCard.A2, UCard.A3, UCard.A4, UCard.A5, UCard.A6,
             UCard.A7);
@@ -137,25 +101,28 @@ public class StrategyWinProbMem implements IStrategy, IMemory {
 
     closestTo.removeAll(toRemove);
     closestTo.removeAll(notPursuableWithBlues(hasBlues, hand));
-
-    sortPursuableWHs(closestTo, hand);
     pursuableWHs = closestTo;
+
+    sortPursuableWHs(hand);
   }
 
-  // TODO: javadoc
-  private void sortPursuableWHs(List<WinningHand> WHs, List<Card> hand) {
-    WHs.sort((a, b) -> {
-      // switch if b has higher permsWOHas than a
+  /**
+   * Sorts 'pursuableWHs' from highest to lowest remaining permutations, taking into account the
+   *   Cards in 'discarded' and in 'hand'. If two 'WinningHand's have the same permutations, sorts
+   *   from lowest to highest point value. If they also have the same point value, sorts from
+   *   highest to lowest strength of the hands returned by calling 'WinningHand.discardIfDesired()'.
+   * @param hand the current hand
+   */
+  void sortPursuableWHs(List<Card> hand) {
+    pursuableWHs.sort((a, b) -> {
       if (WinningHand.permsWOHasAndDiscarded(a, hand, discarded)
               > WinningHand.permsWOHasAndDiscarded(b, hand, discarded)) return -1;
       if (WinningHand.permsWOHasAndDiscarded(a, hand, discarded)
               < WinningHand.permsWOHasAndDiscarded(b, hand, discarded)) return 1;
 
-      // a and b have equal permsWOHas, switch if a is worth less points than b
       if (a.points() < b.points()) return -1;
       if (a.points() > b.points()) return 1;
 
-      // a and b have equal permsWOHas and points, switch if a's discardIfDesired weaker than b's
       int aStrength = 0;
       int bStrength = 0;
       for (Card c : WinningHand.discardIfDesired(a, hand)) aStrength += c.trumpsAmount();
@@ -164,7 +131,14 @@ public class StrategyWinProbMem implements IStrategy, IMemory {
     });
   }
 
-  // TODO: javadoc
+  /**
+   * Determines which 'WinningHand's that contain blue cards in 'pursuableWHs' are not pursuable due
+   *   to the rarity and desirability of blue cards. If players need to obtain more than one blue
+   *   card to get a WinningHand, it is considered not pursuable.
+   * @param WHs the 'WinningHand's with blue cards in 'pursuableWHs'
+   * @param hand the current hand
+   * @return the 'WinningHand's with blue cards that aren't pursuable
+   */
   private List<WinningHand> notPursuableWithBlues(List<WinningHand> WHs, List<Card> hand) {
     List<WinningHand> notPursuable = new ArrayList<>();
     for (WinningHand w : WHs) {
@@ -178,24 +152,5 @@ public class StrategyWinProbMem implements IStrategy, IMemory {
     }
 
     return notPursuable;
-  }
-
-  // TODO: javadoc
-  private void refreshPursuable(List<Card> hand) {
-    List<WinningHand> closest = new ArrayList<>();
-    int closestAway = 5;
-    // get list of WHs (closest) that have lowest cardsAwayFrom
-    for (WinningHand w : pursuableWHs) {
-      int wCardsAwayFrom = WinningHand.cardsAwayFrom(w, hand);
-      if (wCardsAwayFrom < closestAway) {
-        closestAway = wCardsAwayFrom;
-        closest = new ArrayList<>();
-        closest.add(w);
-      }
-      if (wCardsAwayFrom == closestAway) closest.add(w);
-    }
-    // set pursuableWHs equal to closest
-    sortPursuableWHs(closest, hand);
-    pursuableWHs = closest;
   }
 }

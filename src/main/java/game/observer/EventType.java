@@ -1,5 +1,8 @@
 package game.observer;
 
+/**
+ * Game events that implementations of 'Observer' are notified of.
+ */
 public enum EventType {
   PLAYER_CHOICE, // data list = player, card, location, well, pond, next player
   PLAYER_DISCARD, // data list = player, card, well
