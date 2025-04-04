@@ -14,7 +14,7 @@ import player.strategy.IStrategy;
  * An AI player in a Blues game. Makes decisions according to Strategies.
  */
 public class AIPlayer extends APlayer {
-  private final IStrategy strategy;
+  protected final IStrategy strategy;
 
   public AIPlayer(String n, IStrategy s) {
     super(n);
