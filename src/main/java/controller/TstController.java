@@ -69,7 +69,7 @@ public class TstController {
    *   calls 'askPlayAgain'.
    * @param args directions for game, player, and display creation - passed to startMain
    */
-  public static void main(String[] args) {
+  public static void /*main*/ m(String[] args) {
     TstController c = startMain(args);
     boolean repeat = true;
     while (repeat) {
