@@ -10,12 +10,5 @@ public interface IController {
   /**
    * Runs a game of Blues.
    */
-  void run();
-
-  //! TODO: IController should only contain one method (run)
-  /**
-   * Returns true if controller should run another game, false otherwise.
-   * @return true if controller should run another game
-   */
-  boolean repeat();
+  void go();
 }

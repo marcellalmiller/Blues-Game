@@ -246,7 +246,7 @@ public class StandardGame implements IGame {
   //**************************************************************************************** GETTERS
   @Override
   public boolean gameOver() {
-    return totalGamePoints >= players.size() * 100;
+    return totalGamePoints >= players.size() * 25;
   }
 
   @Override

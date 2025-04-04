@@ -20,7 +20,6 @@ import player.strategy.WinningHand;
 public class StrategyWinProbMem extends AStrategyWin implements IMemory {
   private final int accuracy;
   private List<Card> discarded;
-  private List<WinningHand> pursuableWHs;
 
   public StrategyWinProbMem(Approach approach, int memoryAccuracyPercentage) {
     super(approach);

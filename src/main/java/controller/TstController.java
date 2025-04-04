@@ -19,11 +19,11 @@ import player.strategy.strategies.StrategyWinProb;
 import player.strategy.strategies.StrategyWinProbMem;
 
 /**
- * A standard controller for a game of Blues. Displays game state to a specific player.
+ * A test controller for a game of Blues. Displays game state to a specific player.
  */
-public class StandardController implements IController {
-  private final IGame game;
-  private final IDisplay display;
+public class TstController {
+  private IGame game;
+  private IDisplay display;
 
   /**
    * Creates a new controller for pre-existing game and display. Sets fields equal to the
@@ -31,7 +31,7 @@ public class StandardController implements IController {
    * @param g this controller's game
    * @param d this controller's display
    */
-  public StandardController(IGame g, IDisplay d) {
+  public TstController(IGame g, IDisplay d) {
     this.game = g;
     this.display = d;
   }
@@ -43,7 +43,6 @@ public class StandardController implements IController {
    *   recursively to begin another round - else, directs display to notify user that the game is
    *   over.
    */
-  @Override
   public void run() {
     game.startRound();
     while (!game.roundOver()) turn();
@@ -55,7 +54,6 @@ public class StandardController implements IController {
    *   otherwise.
    * @return true if controller should run another game, false otherwise
    */
-  @Override
   public boolean repeat() {
     if (display.askPlayAgain()) {
       game.resetNewGame();
@@ -72,7 +70,7 @@ public class StandardController implements IController {
    * @param args directions for game, player, and display creation - passed to startMain
    */
   public static void main(String[] args) {
-    IController c = startMain(args);
+    TstController c = startMain(args);
     boolean repeat = true;
     while (repeat) {
       c.run();
@@ -114,7 +112,7 @@ public class StandardController implements IController {
    * @param args strings that specify the four player types
    * @return a controller with the new players
    */
-  private static IController startMain(String[] args) {
+  private static TstController startMain(String[] args) {
     List<String> playerNames = List.of("Player 1", "Player 2", "Player 3", "Player 4");
     List<IPlayer> players = new ArrayList<>();
     for (int i = 0; i < args.length; i++) {
@@ -161,7 +159,7 @@ public class StandardController implements IController {
 
     IGame g = new StandardGame(players, new TypeDeck(DeckType.STANDARD));
     IDisplay d = new StringDisplay(g, players);
-    IController c = new StandardController(g, d);
+    TstController c = new TstController(g, d);
     System.setIn(System.in);
 
     d.renderWelcome();
@@ -175,7 +173,7 @@ public class StandardController implements IController {
     if (other == null || getClass() != other.getClass()) {
       return false;
     }
-    StandardController o = (StandardController) other;
+    TstController o = (TstController) other;
     return this.game.equals(o.game) && this.display.equals(o.display);
   }
 

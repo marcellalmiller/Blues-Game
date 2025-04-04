@@ -20,25 +20,39 @@ import utility.Utility;
  *   feedback with a Scanner.
  */
 public class StringDisplay implements IDisplay, Observer {
-  private final ArrayList<IPlayer> opponents;
-  private final IPlayer player;
-  private final ArrayList<IPlayer> allPlayers;
-  private final IGame game;
+  private ArrayList<IPlayer> opponents;
+  private IPlayer player;
+  private ArrayList<IPlayer> allPlayers;
+  private IGame game;
   private Scanner scanner;
 
   /**
-   * Creates a new String display for a game of blues. Field 'player' is set equal to first element
+   * Creates an empty String display for a game of Blues. Fields must be set using 'setGame' before
+   *   a game can be played.
+   */
+  public StringDisplay() {
+    this.scanner = new Scanner(System.in);
+  }
+
+  /**
+   * Creates a new String display for a game of Blues. Field 'player' is set equal to first element
    *     of parameter players, 'opponents' is set equal to all elements of players but the first.
    * @param game the game to display
    * @param players the players
    */
   public StringDisplay(IGame game, List<IPlayer> players) {
+    this.scanner = new Scanner(System.in);
+    setGame(game, players);
+  }
+
+  //*************************************************************************** CALLED BY CONTROLLER
+  @Override
+  public void setGame(IGame game, List<IPlayer> players) {
     this.game = game;
-    ((StandardGame) game).addObserver(this);
+    game.addObserver(this);
     this.player = players.getFirst();
     this.allPlayers = new ArrayList<>(players);
     player.setDisplay(this);
-    this.scanner = new Scanner(System.in);
 
     opponents = new ArrayList<>();
     for (int i = 1; i < players.size(); i++) {
@@ -48,20 +62,38 @@ public class StringDisplay implements IDisplay, Observer {
 
   //************************************************************************************* USER INPUT
   @Override
+  public int askDifficulty() {
+    List<Character> charIdx = List.of('1', '2', '3');
+    String ogMessage = """
+            Please select game difficulty by entering the corresponding number:
+            1. EASY
+            2. NORMAL
+            3. HARD
+            """;
+    System.out.println(ogMessage);
+    char answer = getValidInput(charIdx, ogMessage, "Your entry must be one of the "
+            + "corresponding numbers listed: ");
+
+    return Character.getNumericValue(answer);
+  }
+
+  @Override
   public Card askDiscard() {
+    throwIfNullFields();
     List<Character> charIdx = List.of('A', 'B', 'C', 'D', 'E');
     String ogMessage = "Choose a card to discard from your hand by entering its corresponding "
             + "letter\n" + cardChoiceString(player.getHand(), charIdx);
     System.out.println(ogMessage);
 
     char answer = getValidInput(charIdx, ogMessage,
-            "Your entry must be one of the corresponding letters listed:");
+            "Your entry must be one of the corresponding letters listed: ");
 
     return player.getHand().get(charIdx.indexOf(answer));
   }
 
   @Override
   public Card askChoose() {
+    throwIfNullFields();
     List<Character> full = List.of('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H');
     int pSize = game.getPond().size();
     List<Character> pCharIdx = full.subList(0, pSize);
@@ -90,6 +122,7 @@ public class StringDisplay implements IDisplay, Observer {
 
   @Override
   public Optional<IPlayer> askCall() {
+    throwIfNullFields();
     List<Character> validAnswers = List.of('N', 'X', 'Y', 'Z').subList(0, opponents.size() + 1);
     List<Character> charIdx = List.of('X', 'Y', 'Z').subList(0, opponents.size());
     StringBuilder sb = new StringBuilder();
@@ -111,6 +144,7 @@ public class StringDisplay implements IDisplay, Observer {
 
   @Override
   public boolean askPlayAgain() {
+    throwIfNullFields();
     String ogMessage = "Would you like to play another game?\nEnter 'Y' to accept, or 'N' to quit";
     System.out.println(ogMessage);
 
@@ -123,6 +157,7 @@ public class StringDisplay implements IDisplay, Observer {
   //***************************************************************************************** RENDER
   @Override
   public void renderWelcome() {
+    throwIfNullFields();
     StringBuilder sb = new StringBuilder();
     sb.append("\nWelcome to a new game of Blues!\n").append("You have ").append(opponents.size());
     if (opponents.size() == 1) sb.append(" opponent: ");
@@ -141,11 +176,13 @@ public class StringDisplay implements IDisplay, Observer {
 
   @Override
   public void renderTable() {
+    throwIfNullFields();
     System.out.println(this);
   }
 
   @Override
   public void renderRoundOver() {
+    throwIfNullFields();
     if (game.getRendState().isEmpty()) {
       throw new IllegalStateException("Couldn't fetch round end state");
     }
@@ -167,6 +204,7 @@ public class StringDisplay implements IDisplay, Observer {
 
   @Override
   public void renderGameOver() {
+    throwIfNullFields();
     if (!game.gameOver()) throw new IllegalStateException("The game isn't over");
     if (game.getGameWinner() == null) throw new IllegalStateException("Winner hasn't been set");
     IPlayer winner = game.getGameWinner();
@@ -183,6 +221,7 @@ public class StringDisplay implements IDisplay, Observer {
   //*************************************************************************************** OBSERVER
   @Override
   public void update(EventType event, List<Object> data) {
+    throwIfNullFields();
     switch (event) {
       case PLAYER_CHOICE -> {
         System.out.println("\033[33m" + ((IPlayer) data.getFirst()).name() + " chose " +
@@ -531,6 +570,13 @@ public class StringDisplay implements IDisplay, Observer {
       }
     }
     return middleStrings;
+  }
+
+  //****************************************************************************** EXCEPTION HELPERS
+  private void throwIfNullFields() {
+    if (opponents == null || player == null || allPlayers == null || game == null) {
+      throw new IllegalStateException("Assign a game and players using 'setGame'!");
+    }
   }
 
   //*************************************************************************** GOOD CLASS OVERRIDES
