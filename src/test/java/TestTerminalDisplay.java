@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import display.StringDisplay;
+import display.TerminalDisplay;
 import game.IGame;
 import game.StandardGame;
 import game.deck.TstDeck;
@@ -20,16 +20,16 @@ import utility.Utility;
 
 /**
  * These tests will not run unless private helper resetScanner() call is un-commented out in
- *   StringDisplay class!
+ *   TerminalDisplay class!
  */
-public class TestStringDisplay {
+public class TestTerminalDisplay {
   IPlayer p1;
   IPlayer p2;
   IPlayer p3;
   IPlayer p4;
   List<IPlayer> fourPs;
   IGame g;
-  StringDisplay d;
+  TerminalDisplay d;
 
   InputStream ogIn;
   PrintStream ogOut;
@@ -40,7 +40,7 @@ public class TestStringDisplay {
     initTests();
 
     Assert.assertNull(p1.getDisplay());
-    d = new StringDisplay(g, fourPs);
+    d = new TerminalDisplay(g, fourPs);
     Assert.assertEquals(p1.getDisplay(), d);
   }
 
@@ -59,8 +59,8 @@ public class TestStringDisplay {
     g.startRound();
     gb.startRound();
 
-    d = new StringDisplay(g, fourPs);
-    StringDisplay db = new StringDisplay(gb, fourPsb);
+    d = new TerminalDisplay(g, fourPs);
+    TerminalDisplay db = new TerminalDisplay(gb, fourPsb);
     for (int i = 0; i < 3; i++) {
       turn(g);
       turn(gb);
@@ -74,7 +74,7 @@ public class TestStringDisplay {
     Assert.assertFalse(db.equals(d));
     Assert.assertNotEquals(d.hashCode(), db.hashCode());
     Assert.assertFalse(d.equals(new Object()));
-    Assert.assertFalse(db.equals(new StringDisplay(g, fourPs)));
+    Assert.assertFalse(db.equals(new TerminalDisplay(g, fourPs)));
   }
 
   //**************************************************************************** TEST RENDER METHODS
@@ -638,7 +638,7 @@ public class TestStringDisplay {
       Assert.assertEquals(output.toString(), chooseCardS + """
               Your entry must be one of the corresponding letters listed:
               
-              """ + Utility.gameRules +
+              """ + Utility.gameRulesAnsi +
               """
               
               """ + chooseCardS);
@@ -703,7 +703,7 @@ public class TestStringDisplay {
             """ + askCall + """
             Your entry must be one of the corresponding letters listed:
             
-            """ + Utility.gameRules + "\n" + askCall + """
+            """ + Utility.gameRulesAnsi + "\n" + askCall + """
             
             CURRENT SCORES:
             _________________________________________________________________
@@ -754,14 +754,14 @@ public class TestStringDisplay {
     initTests();
     Z.setupCase1(p1, p2, p3, p4);
     g.startRound();
-    d = new StringDisplay(g, fourPs);
+    d = new TerminalDisplay(g, fourPs);
     g.flipWell();
   }
 
   private void initREndTests() {
     initTests();
     g.startRound();
-    d = new StringDisplay(g, fourPs);
+    d = new TerminalDisplay(g, fourPs);
     initOutIn("");
   }
 

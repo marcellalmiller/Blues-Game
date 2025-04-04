@@ -29,21 +29,24 @@ public interface IPlayer extends Observer {
    */
   Card chooseCard(List<Card> pond, List<Card> well);
 
-  // TODO: update javadoc
   /**
    * This method is called every round after the pond has been placed but not flipped. If this
    *     Player thinks one of its opponents will win during this round, it can call "no blues" by
    *     returning a player. Else, it returns an empty optional.
-   * @param opponents
-   * @param well
-   * @return an opposing Player if this Player thinks that opponent is about to win, empty otherwise
+   * @param opponents the opponents
+   * @param well the current well
+   * @return an opposing 'IPlayer' if this thinks that opponent is about to win, empty otherwise
    */
   Optional<IPlayer> callNo(List<IPlayer> opponents, List<Card> well);
 
-  // TODO: javadoc
+  /**
+   * Resets fields in preparation for a new game.
+   */
   void resetNewGame();
 
-  // TODO: javadoc
+  /**
+   * Resets fields in preparation for a new round.
+   */
   void resetNewRound();
 
   //************************************************************************************ GAME MODIFY
@@ -120,11 +123,4 @@ public interface IPlayer extends Observer {
    * @return this Player's display or null if none has been set
    */
   IDisplay getDisplay();
-
-  //*************************************************************************** GOOD CLASS OVERRIDES
-  String toString();
-
-  boolean equals(Object other);
-
-  int hashCode();
 }

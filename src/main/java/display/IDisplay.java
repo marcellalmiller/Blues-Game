@@ -1,7 +1,9 @@
 package display;
 
+import java.util.List;
 import java.util.Optional;
 
+import game.IGame;
 import game.deck.card.Card;
 import game.observer.Observer;
 import player.IPlayer;
@@ -11,7 +13,20 @@ import player.IPlayer;
  *     'player' and defined by field 'player'.
  */
 public interface IDisplay extends Observer {
+  //*************************************************************************** CALLED BY CONTROLLER
+  /**
+   * Sets this IDisplay's game and players.
+   * @param game this IDisplay's game
+   * @param players this IDisplay's players
+   */
+  void setGame(IGame game, List<IPlayer> players);
+
   //************************************************************************************* USER INPUT
+  /**
+   * Returns a String that represents the difficulty of the game based on user input.
+   */
+  int askDifficulty();
+
   /**
    * Returns the Card player wants to discard from their hand by getting their input through
    *     this display. Called and returned by HPlayer's 'Card discard(List<Card> well)' method.

@@ -10,10 +10,9 @@ import game.deck.card.properties.Color;
 import utility.Utility;
 
 /**
- * The approaches a PStrategy can use to play a game of Blues.
+ * The approaches an 'IStrategy' can use to play a game of Blues.
  */
 public enum Approach {
-  //*************************************************************************** DEFENSIVE STRATEGIES
   /**
    * MIN_POINTS attempts to minimize the points in a player's hand.
    */
@@ -125,7 +124,7 @@ public enum Approach {
   },
 
   /**
-   * RANDOM makes random suggestions.
+   * RANDOM makes random recommendations.
    */
   RANDOM {
     /**

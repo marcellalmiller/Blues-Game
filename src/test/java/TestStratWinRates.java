@@ -1,6 +1,14 @@
+import com.google.api.services.sheets.v4.Sheets;
+import com.google.api.services.sheets.v4.model.AppendValuesResponse;
+import com.google.api.services.sheets.v4.model.ValueRange;
+
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import game.IGame;
@@ -15,6 +23,7 @@ import player.strategy.strategies.StrategyEmpty;
 import player.strategy.strategies.StrategyWin;
 import player.strategy.strategies.StrategyWinProb;
 import player.strategy.strategies.StrategyWinProbMem;
+import utility.SheetsServiceUtil;
 
 public class TestStratWinRates {
   IGame g;
@@ -25,6 +34,15 @@ public class TestStratWinRates {
   int[] rScores;
   int[] gScores;
   public TypeDeck deck = new TypeDeck(DeckType.STANDARD);
+  int sampleSize = 1000;
+
+  public static Sheets sheets;
+  public static String SPREADSHEET_ID;
+
+  @BeforeClass
+  public static void setup() throws GeneralSecurityException, IOException {
+    sheets = SheetsServiceUtil.getSheetsService();
+  }
 
   @Test //# TEST A
   public void test4minWPM100() {
@@ -35,9 +53,9 @@ public class TestStratWinRates {
             new AIPlayer("Player 4", new StrategyWinProbMem(Approach.MIN_POINTS, 100))
     );
     initTests();
-    analyze(1000);
+    analyze(sampleSize);
     System.out.println("4minWPM100---------------------------------------------------------------");
-    printAnalysis(1000);
+    printAnalysis(sampleSize);
   }
 
   @Test //# TEST B
@@ -49,9 +67,9 @@ public class TestStratWinRates {
             new AIPlayer("Player 4", new StrategyWinProbMem(Approach.MIN_POINTS, 100))
     );
     initTests();
-    analyze(1000);
+    analyze(sampleSize);
     System.out.println("2minWPM50_2minWPM100-----------------------------------------------------");
-    printAnalysis(1000);
+    printAnalysis(sampleSize);
   }
 
   @Test //# TEST C
@@ -63,9 +81,9 @@ public class TestStratWinRates {
             new AIPlayer("Player 4", new StrategyWinProbMem(Approach.MIN_POINTS, 50))
     );
     initTests();
-    analyze(1000);
+    analyze(sampleSize);
     System.out.println("2minWPM100_2minWPM50-----------------------------------------------------");
-    printAnalysis(1000);
+    printAnalysis(sampleSize);
   }
 
   @Test //# TEST D
@@ -77,9 +95,9 @@ public class TestStratWinRates {
             new AIPlayer("Player 4", new StrategyWinProbMem(Approach.MIN_POINTS, 100))
     );
     initTests();
-    analyze(1000);
+    analyze(sampleSize);
     System.out.println("2minWPM10_2minWPM100-----------------------------------------------------");
-    printAnalysis(1000);
+    printAnalysis(sampleSize);
   }
 
   @Test //# TEST E
@@ -91,9 +109,9 @@ public class TestStratWinRates {
             new AIPlayer("Player 4", new StrategyWinProbMem(Approach.MIN_POINTS, 100))
     );
     initTests();
-    analyze(1000);
+    analyze(sampleSize);
     System.out.println("2maxWPM100_2minWPM100----------------------------------------------------");
-    printAnalysis(1000);
+    printAnalysis(sampleSize);
   }
 
   @Test //# TEST F
@@ -105,9 +123,9 @@ public class TestStratWinRates {
             new AIPlayer("Player 4", new StrategyWinProbMem(Approach.MIN_POINTS, 100))
     );
     initTests();
-    analyze(1000);
+    analyze(sampleSize);
     System.out.println("2ranWPM100_2minWPM100----------------------------------------------------");
-    printAnalysis(1000);
+    printAnalysis(sampleSize);
   }
 
   @Test //# TEST G
@@ -119,9 +137,9 @@ public class TestStratWinRates {
             new AIPlayer("Player 4", new StrategyWinProbMem(Approach.RANDOM, 100))
     );
     initTests();
-    analyze(1000);
+    analyze(sampleSize);
     System.out.println("2maxWPM100_2ranWPM100----------------------------------------------------");
-    printAnalysis(1000);
+    printAnalysis(sampleSize);
   }
 
   @Test
@@ -133,9 +151,9 @@ public class TestStratWinRates {
             new AIPlayer("Player 4", new StrategyWinProb(Approach.MIN_POINTS))
     );
     initTests();
-    analyze(1000);
+    analyze(sampleSize);
     System.out.println("4minWP-------------------------------------------------------------------");
-    printAnalysis(1000);
+    printAnalysis(sampleSize);
   }
 
   @Test
@@ -147,9 +165,9 @@ public class TestStratWinRates {
             new AIPlayer("Player 4", new StrategyWinProb(Approach.MIN_POINTS))
     );
     initTests();
-    analyze(1000);
+    analyze(sampleSize);
     System.out.println("2maxWP_2minWP------------------------------------------------------------");
-    printAnalysis(1000);
+    printAnalysis(sampleSize);
   }
 
   @Test
@@ -161,9 +179,9 @@ public class TestStratWinRates {
             new AIPlayer("Player 4", new StrategyWinProb(Approach.MIN_POINTS))
     );
     initTests();
-    analyze(1000);
+    analyze(sampleSize);
     System.out.println("2ranWP_2minWP------------------------------------------------------------");
-    printAnalysis(1000);
+    printAnalysis(sampleSize);
   }
 
   @Test
@@ -175,23 +193,50 @@ public class TestStratWinRates {
             new AIPlayer("Player 4", new StrategyWinProb(Approach.RANDOM))
     );
     initTests();
-    analyze(1000);
+    analyze(sampleSize);
     System.out.println("2maxWP_2ranWP------------------------------------------------------------");
-    printAnalysis(1000);
+    printAnalysis(sampleSize);
   }
 
   @Test //# TEST L
-  public void test2minWP_2minWPM100() {
+  public void test2minWP_2minWPM100() throws GeneralSecurityException, IOException {
     players = List.of(
-            new AIPlayer("Player 1", new StrategyWinProb(Approach.MIN_POINTS)),
-            new AIPlayer("Player 2", new StrategyWinProb(Approach.MIN_POINTS)),
-            new AIPlayer("Player 3", new StrategyWinProbMem(Approach.MIN_POINTS, 100)),
-            new AIPlayer("Player 4", new StrategyWinProbMem(Approach.MIN_POINTS, 100))
+            new AIPlayer("minW", new StrategyWinProb(Approach.MIN_POINTS)),
+            new AIPlayer("minW", new StrategyWinProb(Approach.MIN_POINTS)),
+            new AIPlayer("minWPM100", new StrategyWinProbMem(Approach.MIN_POINTS, 100)),
+            new AIPlayer("minWPM100", new StrategyWinProbMem(Approach.MIN_POINTS, 100))
     );
     initTests();
-    analyze(1000);
+    analyze(sampleSize);
     System.out.println("2minWP_2minWPM100--------------------------------------------------------");
-    printAnalysis(1000);
+    printAnalysis(sampleSize);
+
+    for (int i = 0; i < players.size(); i++) {
+      List<Double> nums = numsForPrintAnalysis(sampleSize, i);
+      StringBuilder opponents = new StringBuilder();
+
+      for (int j = 0; j < players.size(); j++) {
+        if (j != i) opponents.append(players.get(j).name()).append(" ");
+      }
+
+      analysisToSpreadsheet(nums.getFirst(), nums.get(1), nums.get(2), nums.get(3), sampleSize,
+              players.get(i).name(), opponents.toString());
+    }
+  }
+
+  private void analysisToSpreadsheet(double ptsPerRnd, double ptsPerGame, double rndWinRate,
+                                     double gameWinRate, double splSize, String player, String opponents)
+          throws GeneralSecurityException, IOException {
+    ValueRange body = new ValueRange().setValues(Arrays.asList(Arrays.asList(ptsPerRnd, ptsPerGame,
+            rndWinRate, gameWinRate, splSize, opponents)));
+
+    AppendValuesResponse result =
+            sheets.spreadsheets().values()
+            .append("1BnLq8vVLhUG3d4hblsfTvhUHtwNHlPoNObfFZte_5cI", player + "!A1", body)
+            .setValueInputOption("USER_ENTERED")
+            .setInsertDataOption("INSERT_ROWS")
+            .setIncludeValuesInResponse(true)
+            .execute();
   }
 
   @Test //# TEST M
@@ -203,9 +248,9 @@ public class TestStratWinRates {
             new AIPlayer("Player 4", new StrategyWinProbMem(Approach.MAX_TRUMP, 100))
     );
     initTests();
-    analyze(1000);
+    analyze(sampleSize);
     System.out.println("1minWPM100_3maxWPM100----------------------------------------------------");
-    printAnalysis(1000);
+    printAnalysis(sampleSize);
   }
 
   @Test //# TEST N
@@ -217,9 +262,9 @@ public class TestStratWinRates {
             new AIPlayer("Player 4", new StrategyWin(Approach.MIN_POINTS))
     );
     initTests();
-    analyze(1000);
+    analyze(sampleSize);
     System.out.println("4minW--------------------------------------------------------------------");
-    printAnalysis(1000);
+    printAnalysis(sampleSize);
   }
 
   @Test //# TEST O
@@ -231,9 +276,9 @@ public class TestStratWinRates {
             new AIPlayer("Player 4", new StrategyWin(Approach.RANDOM))
     );
     initTests();
-    analyze(1000);
+    analyze(sampleSize);
     System.out.println("2minW_2ranW--------------------------------------------------------------");
-    printAnalysis(1000);
+    printAnalysis(sampleSize);
   }
 
   @Test //# TEST P
@@ -245,9 +290,9 @@ public class TestStratWinRates {
             new AIPlayer("Player 4", new StrategyWinProb(Approach.MIN_POINTS))
     );
     initTests();
-    analyze(1000);
+    analyze(sampleSize);
     System.out.println("2minW_2minWP--------------------------------------------------------------");
-    printAnalysis(1000);
+    printAnalysis(sampleSize);
   }
 
   @Test //# TEST Q
@@ -259,9 +304,9 @@ public class TestStratWinRates {
             new AIPlayer("Player 4", new StrategyWinProbMem(Approach.MIN_POINTS, 100))
     );
     initTests();
-    analyze(1000);
+    analyze(sampleSize);
     System.out.println("2minW_2minWPM100---------------------------------------------------------");
-    printAnalysis(1000);
+    printAnalysis(sampleSize);
   }
 
   @Test //# TEST R
@@ -273,9 +318,9 @@ public class TestStratWinRates {
             new AIPlayer("Player 4", new StrategyWin(Approach.MAX_TRUMP))
     );
     initTests();
-    analyze(1000);
+    analyze(sampleSize);
     System.out.println("2minW_2maxW--------------------------------------------------------------");
-    printAnalysis(1000);
+    printAnalysis(sampleSize);
   }
 
   @Test //# TEST S
@@ -287,9 +332,9 @@ public class TestStratWinRates {
             new AIPlayer("Player 4", new StrategyEmpty(Approach.MIN_POINTS))
     );
     initTests();
-    analyze(10000);
+    analyze(sampleSize);
     System.out.println("4minE--------------------------------------------------------------------");
-    printAnalysis(10000);
+    printAnalysis(sampleSize);
   }
 
   @Test //# TEST T
@@ -301,9 +346,9 @@ public class TestStratWinRates {
             new AIPlayer("Player 4", new StrategyEmpty(Approach.MAX_TRUMP))
     );
     initTests();
-    analyze(1000);
+    analyze(sampleSize);
     System.out.println("2minE_2maxE--------------------------------------------------------------");
-    printAnalysis(1000);
+    printAnalysis(sampleSize);
   }
 
   @Test //# TEST U
@@ -315,9 +360,9 @@ public class TestStratWinRates {
             new AIPlayer("Player 4", new StrategyEmpty(Approach.RANDOM))
     );
     initTests();
-    analyze(1000);
+    analyze(sampleSize);
     System.out.println("2minE_2ranE--------------------------------------------------------------");
-    printAnalysis(1000);
+    printAnalysis(sampleSize);
   }
 
   @Test //# TEST V
@@ -329,9 +374,9 @@ public class TestStratWinRates {
             new AIPlayer("Player 4", new StrategyEmpty(Approach.MAX_TRUMP))
     );
     initTests();
-    analyze(1000);
+    analyze(sampleSize);
     System.out.println("2ranE_2maxE--------------------------------------------------------------");
-    printAnalysis(1000);
+    printAnalysis(sampleSize);
   }
 
   @Test //# TEST W
@@ -343,9 +388,9 @@ public class TestStratWinRates {
             new AIPlayer("Player 4", new StrategyWin(Approach.MIN_POINTS))
     );
     initTests();
-    analyze(1000);
+    analyze(sampleSize);
     System.out.println("2minE_2minW--------------------------------------------------------------");
-    printAnalysis(1000);
+    printAnalysis(sampleSize);
   }
 
   @Test //# TEST X
@@ -357,9 +402,9 @@ public class TestStratWinRates {
             new AIPlayer("Player 4", new StrategyWinProb(Approach.MIN_POINTS))
     );
     initTests();
-    analyze(1000);
+    analyze(sampleSize);
     System.out.println("2minE_2minWP-------------------------------------------------------------");
-    printAnalysis(1000);
+    printAnalysis(sampleSize);
   }
 
   @Test //# TEST Y
@@ -371,9 +416,9 @@ public class TestStratWinRates {
             new AIPlayer("Player 4", new StrategyWinProbMem(Approach.MIN_POINTS, 100))
     );
     initTests();
-    analyze(1000);
+    analyze(sampleSize);
     System.out.println("2minE_2minWPM------------------------------------------------------------");
-    printAnalysis(1000);
+    printAnalysis(sampleSize);
   }
 
   @Test //# TEST Z
@@ -385,9 +430,9 @@ public class TestStratWinRates {
             new AIPlayer("Player 4", new StrategyEmpty(Approach.MIN_POINTS))
     );
     initTests();
-    analyze(1000);
+    analyze(sampleSize);
     System.out.println("1minWPM100_1minWP_1minW_1minE--------------------------------------------");
-    printAnalysis(1000);
+    printAnalysis(sampleSize);
   }
 
   @Test
@@ -420,6 +465,7 @@ public class TestStratWinRates {
 
   //************************************************************************ MOCK CONTROLLER METHODS
   private void run() {
+    if (rounds % 1000 == 0) System.out.println("Running round " + rounds);
     g.startRound();
     while (!g.roundOver()) {
       turn();
@@ -469,7 +515,7 @@ public class TestStratWinRates {
     nums.add(Math.round((double) rScores[playerIdx] / (double) rounds * 10.0) / 10.0);
     nums.add(Math.round((double) gScores[playerIdx] / gamesPlayed * 10.0) / 10.0);
     nums.add(Math.round((double) pRWins[playerIdx] / (double) rounds * 100.0 * 10.0) / 10.0);
-    nums.add((Math.round(100.00 * (double) pGWins[playerIdx] / (double) gamesPlayed) * 1.00));
+    nums.add(Math.round((double) pGWins[playerIdx] / (double) gamesPlayed * 1000.0) / 10.0);
     return nums;
   }
 }

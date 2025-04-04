@@ -1,12 +1,9 @@
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import game.deck.card.Card;
-import game.deck.card.UCard;
 import game.deck.card.properties.Position;
 import game.deck.card.properties.Rank;
 import game.deck.card.properties.Color;
@@ -97,9 +94,9 @@ public class TestCard {
     Assert.assertEquals(Color.BLACK.suits(), List.of(Suit.DASH, Suit.DROP, Suit.HEX, Suit.BOLT));
     Assert.assertEquals(Color.BLUE.suits(), List.of(Suit.BLUE));
 
-    Assert.assertEquals(Z.fourDrop.coloredTS(), "\033[37m4⬯\033[0m");
-    Assert.assertEquals(Z.sevenBlue.coloredTS(), "\033[36m7♦\033[0m");
-    Assert.assertEquals(Z.oneHeart.coloredTS(), "\033[31m1♡\033[0m");
+    Assert.assertEquals(Z.fourDrop.ansiTS(), "\033[37m4⬯\033[0m");
+    Assert.assertEquals(Z.sevenBlue.ansiTS(), "\033[36m7♦\033[0m");
+    Assert.assertEquals(Z.oneHeart.ansiTS(), "\033[31m1♡\033[0m");
   }
 
   @Test

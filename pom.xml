@@ -22,6 +22,13 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Guava compatible with Google API -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>30.1-jre</version>  <!-- This version is compatible with Google APIs -->
+        </dependency>
+
         <!-- Google API Client -->
         <dependency>
             <groupId>com.google.api-client</groupId>
@@ -34,6 +41,13 @@
             <groupId>com.google.oauth-client</groupId>
             <artifactId>google-oauth-client-jetty</artifactId>
             <version>1.23.0</version>
+        </dependency>
+
+        <!-- Google Auth -->
+        <dependency>
+            <groupId>com.google.auth</groupId>
+            <artifactId>google-auth-library-oauth2-http</artifactId>
+            <version>0.26.0</version>
         </dependency>
 
         <!-- Google Sheets API Client -->

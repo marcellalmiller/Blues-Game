@@ -155,4 +155,15 @@ public class TestWinningHand {
     System.out.println(WinningHand.closestTo(Z.hand10));
     System.out.println(WinningHand.closestTo(Z.hand11));
   }
+
+  @Test
+  public void testPermsWOHasAndDiscarded() {
+    System.out.println("Total perms: " + WinningHand.R34_A5_R67.permutations());
+    System.out.println("Perms without has, has doesn't contain: " + WinningHand.permsWOHas(WinningHand.R34_A5_R67, List.of(Z.sevenDash, Z.oneCross, Z.sixHex, Z.fiveHex, Z.sevenBlue)));
+    System.out.println("Perms without has, has contains: " + WinningHand.permsWOHas(WinningHand.R34_A5_R67, List.of(Z.threeStar, Z.fourCross, Z.threeBlue, Z.sixHex, Z.fiveDrop)));
+    System.out.println("Perms without has and discarded, has doesn't contain, discarded doesn't contain: " + WinningHand.permsWOHasAndDiscarded(WinningHand.R34_A5_R67, List.of(Z.sevenDash, Z.oneCross, Z.sixHex, Z.fiveHex, Z.sevenBlue), List.of()));
+    System.out.println("Perms without has and discarded, has contains, discarded doesn't contain: " + WinningHand.permsWOHasAndDiscarded(WinningHand.R34_A5_R67, List.of(Z.threeStar, Z.fourCross, Z.threeBlue, Z.sixHex, Z.fiveDrop), List.of()));
+    System.out.println("Perms without has and discarded, has contains, discarded contains: " + WinningHand.permsWOHasAndDiscarded(WinningHand.R34_A5_R67, List.of(Z.threeStar, Z.fourCross, Z.threeBlue, Z.sixHex, Z.fiveDrop), List.of(Z.fiveBlue, Z.sixHeart)));
+    System.out.println("Perms without has and discarded, has doesn't contain, discarded contains: " + WinningHand.permsWOHasAndDiscarded(WinningHand.R34_A5_R67, List.of(Z.sevenDash, Z.oneCross, Z.sixHex, Z.fiveHex, Z.sevenBlue), List.of(Z.fiveBlue, Z.sixHeart)));
+  }
 }

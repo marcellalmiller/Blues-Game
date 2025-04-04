@@ -21,7 +21,7 @@ import player.IPlayer;
 import utility.Utility;
 
 /**
- * A standard game of Blues with 2 to 4 players.
+ * A standard game of Blues with 4 players.
  */
 public class StandardGame implements IGame {
   private final IDeck deck;
@@ -34,6 +34,7 @@ public class StandardGame implements IGame {
   private IPlayer gameWinner;
   private List<Observer> observers;
   private boolean bluesBroken; // TODO: implement
+  public int turn;
 
   /**
    * Constructs a new game with the passed players.
@@ -48,6 +49,7 @@ public class StandardGame implements IGame {
     this.totalGamePoints = 0;
     this.rendState = Optional.empty();
     this.gameWinner = null;
+    this.turn = 0;
     this.observers = new ArrayList<>();
     for (IPlayer p : players) {
       observers.add(p);
@@ -59,6 +61,7 @@ public class StandardGame implements IGame {
   @Override
   public void startRound() {
     resetNewRound();
+    this.turn = 0;
 
     for (int i = 0; i < 5; i++) {
       for (IPlayer p : players) {
@@ -76,6 +79,7 @@ public class StandardGame implements IGame {
 
   @Override
   public void flipWell() {
+    turn += 1;
     if (!well.isEmpty()) {
       throw new IllegalStateException("Cannot flip new well if existing well isn't empty");
     }
@@ -146,6 +150,12 @@ public class StandardGame implements IGame {
   @Override
   public Optional<NBCall> collectNBCs() {
     if (well.size() != 4 || pond.size() != 4) {
+      System.out.println(players.size());
+      System.out.println("Well: " + well);
+      System.out.println("Pond: " + pond);
+      for (IPlayer p : players) {
+        System.out.println(p.name() + "'s hand: " + p.getHand());
+      }
       throw new IllegalStateException("Cannot ask players for 'No Blues' calls if well and pond are"
               + " not full\n");
     }
@@ -236,7 +246,7 @@ public class StandardGame implements IGame {
   //**************************************************************************************** GETTERS
   @Override
   public boolean gameOver() {
-    return totalGamePoints >= players.size() * 100;
+    return totalGamePoints >= players.size() * 25;
   }
 
   @Override
@@ -283,14 +293,12 @@ public class StandardGame implements IGame {
   }
 
   //************************************************************************************** OBSERVERS
-  // TODO: javadoc
-  // Pull method to IGame interface?
+  @Override
   public void addObserver(Observer o) {
     observers.add(o);
   }
 
-  // TODO: javadoc
-  // Pull method to IGame interface?
+  @Override
   public void updateObservers(EventType event, List<Object> data) {
     for (Observer o : observers) o.update(event, data);
   }
