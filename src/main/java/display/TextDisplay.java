@@ -148,6 +148,8 @@ public class TextDisplay implements IDisplay, Observer {
     directionText.setText(ogMessage);
 
     char answer = getValidInput(charIdx);
+    gameText.setText(this.toString());
+    scoreText.setText(game.getScoreSheet().htmlToString());
 
     return player.getHand().get(charIdx.indexOf(answer));
   }
@@ -179,6 +181,8 @@ public class TextDisplay implements IDisplay, Observer {
     if (pCharIdx.contains(answer)) {
       return game.getPond().get(pCharIdx.indexOf(answer));
     }
+    gameText.setText(this.toString());
+
     return game.getWell().get(wCharIdx.indexOf(answer));
   }
 
@@ -199,6 +203,7 @@ public class TextDisplay implements IDisplay, Observer {
     if (answer == 'N') {
       return Optional.empty();
     }
+    gameText.setText(this.toString());
 
     return Optional.of(opponents.get(charIdx.indexOf(answer)));
   }
@@ -211,6 +216,7 @@ public class TextDisplay implements IDisplay, Observer {
     directionText.setText(ogMessage);
 
     char answer = getValidInput(List.of('Y', 'N'));
+    gameText.setText(this.toString());
 
     return answer == 'Y';
   }
@@ -269,26 +275,6 @@ public class TextDisplay implements IDisplay, Observer {
   public void update(EventType event, List<Object> data) {
     throwIfNullFields();
     switch (event) {
-      case PLAYER_CHOICE -> {
-        /* System.out.println(((IPlayer) data.getFirst()).name() + " chose " +
-                ((Card) data.get(1)).htmlTS() + " from the " + data.get(2)); */
-        if (data.size() > 5 && data.get(5).equals(player)) renderTable();
-      }
-      case PLAYER_DISCARD -> {
-        /* System.out.println("\033[33m" + ((IPlayer) data.getFirst()).name()
-                + " threw the " + ((Card) data.get(1)).htmlTS() + "\033[33m into the pond\033[0m"); */
-      }
-      case CARDS_CLEARED -> {
-        StringBuilder sb = new StringBuilder();
-        if (data.isEmpty()) break;
-        for (Object o : data) {
-          Card c = (Card) o;
-          sb.append(c.htmlTS()).append(" ");
-        }
-        String verb = "\033[33mwere";
-        if (data.size() == 1) verb = "\033[33mwas";
-        // System.out.println(sb + verb + " thrown into the sea\033[0m");
-      }
       case ROUND_OVER -> renderRoundOver();
       case GAME_OVER -> renderGameOver();
     }

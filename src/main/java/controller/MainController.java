@@ -90,8 +90,8 @@ public class MainController implements IController {
       }
       case 3 -> {
         players.add(new AIPlayer("Bot 1", new StrategyWinProbMem(Approach.MAX_TRUMP, 100)));
-        players.add(new AIPlayer("Bot 2", new StrategyWinProb(Approach.MIN_POINTS)));
-        players.add(new AIPlayer("Bot 3", new StrategyWinProb(Approach.MAX_TRUMP)));
+        players.add(new AIPlayer("Bot 2", new StrategyWinProbMem(Approach.MIN_POINTS, 100)));
+        players.add(new AIPlayer("Bot 3", new StrategyWinProb(Approach.MIN_POINTS)));
       }
     }
 
