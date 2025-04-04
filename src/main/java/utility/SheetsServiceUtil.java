@@ -1,3 +1,5 @@
+package utility;
+
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.sheets.v4.Sheets;
@@ -14,7 +16,7 @@ public class SheetsServiceUtil {
   private static final String APPLICATION_NAME = "Blues Game"; // the name of this application
 
   /**
-   * Creates credentials using 'GoogleAuthorizeUtil'. Uses the credentials to access and return a
+   * Creates credentials using 'utility.GoogleAuthorizeUtil'. Uses the credentials to access and return a
    *   Google sheets object.
    * @return Google sheets
    * @throws GeneralSecurityException
