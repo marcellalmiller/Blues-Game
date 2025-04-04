@@ -7,7 +7,9 @@ import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.store.MemoryDataStoreFactory;
 import com.google.api.services.sheets.v4.SheetsScopes;
+import com.google.auth.oauth2.ServiceAccountCredentials;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -16,7 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class GoogleAuthorizeUtil {
-  public static Credential authorize() throws IOException, GeneralSecurityException {
+  public static Credential authorizeMyAcc() throws IOException, GeneralSecurityException {
     // build GoogleClientSecrets from JSON file
     InputStream in =
             GoogleAuthorizeUtil.class.getResourceAsStream("/google-sheets-client-secret.json");
@@ -35,5 +37,10 @@ public class GoogleAuthorizeUtil {
             new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
 
     return credential;
+  }
+
+  public static ServiceAccountCredentials authorizeServiceAcc() throws IOException, GeneralSecurityException {
+    FileInputStream credentialsStream = new FileInputStream("src/main/resources/google-sheets-service-account.json");
+    return ServiceAccountCredentials.fromStream(credentialsStream);
   }
 }

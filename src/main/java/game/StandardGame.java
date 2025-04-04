@@ -150,6 +150,12 @@ public class StandardGame implements IGame {
   @Override
   public Optional<NBCall> collectNBCs() {
     if (well.size() != 4 || pond.size() != 4) {
+      System.out.println(players.size());
+      System.out.println("Well: " + well);
+      System.out.println("Pond: " + pond);
+      for (IPlayer p : players) {
+        System.out.println(p.name() + "'s hand: " + p.getHand());
+      }
       throw new IllegalStateException("Cannot ask players for 'No Blues' calls if well and pond are"
               + " not full\n");
     }
