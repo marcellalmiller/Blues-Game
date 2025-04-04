@@ -21,7 +21,7 @@ import player.IPlayer;
 import utility.Utility;
 
 /**
- * A standard game of Blues with 2 to 4 players.
+ * A standard game of Blues with 4 players.
  */
 public class StandardGame implements IGame {
   private final IDeck deck;
@@ -293,14 +293,12 @@ public class StandardGame implements IGame {
   }
 
   //************************************************************************************** OBSERVERS
-  // TODO: javadoc
-  // Pull method to IGame interface?
+  @Override
   public void addObserver(Observer o) {
     observers.add(o);
   }
 
-  // TODO: javadoc
-  // Pull method to IGame interface?
+  @Override
   public void updateObservers(EventType event, List<Object> data) {
     for (Observer o : observers) o.update(event, data);
   }

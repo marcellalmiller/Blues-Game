@@ -62,8 +62,6 @@ public abstract class APlayer implements IPlayer {
   public void dealCard(Card c) {
     hand.add(c);
     c.setPosition(Position.HAND);
-    // TODO: figure out this situation
-    // pondCard = Optional.empty();
     hand = new ArrayList<>(Utility.sortHandByRank(hand));
   }
 
@@ -77,7 +75,7 @@ public abstract class APlayer implements IPlayer {
 
   @Override
   public void addPoints(int p) {
-    totalGamePoints+= p;
+    totalGamePoints += p;
   }
 
   //**************************************************************************************** SETTERS

@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import game.deck.IDeck;
 import game.deck.card.Card;
+import game.observer.EventType;
+import game.observer.Observer;
 import game.rends.REndState;
 import game.rends.NBCall;
 import game.score.ScoreSheet;
@@ -136,6 +138,20 @@ public interface IGame {
    * @return the winner of this game or null if the game isn't over
    */
   IPlayer getGameWinner();
+
+  //************************************************************************** OBSERVER INTERACTIONS
+  /**
+   * Subscribes Observer 'o' to EventType notifications from the game.
+   * @param o the Observer to be added
+   */
+  void addObserver(Observer o);
+
+  /**
+   * Notifies all subscribed Observers of the EventType and its associated data.
+   * @param event the EventType
+   * @param data the associated data
+   */
+  void updateObservers(EventType event, List<Object> data);
 
   //*************************************************************************** GOOD CLASS OVERRIDES
   String toString();

@@ -249,14 +249,29 @@ public enum WinningHand {
     return perms;
   }
 
+  /**
+   * Returns the number of permutations (possible arrangements of SCards) associated with this
+   *   WinningHand. For example, the WinningHand 'R1_B25' had 768 permutations: (3 red ones) *
+   *   (4 black twos) * (4 black threes) * (4 black fours) * (4 black fives) = 768.
+   * @return the number of permutations associated with this WinningHand
+   */
   public int permutations() {
     return permutations;
   }
 
+  /**
+   * Returns the list of UCards associated with this WinningHand. For example, for the WinningHand
+   *   'A2_R36', this method would return [UCard.A2, UCard.R3, UCard.R4, UCard.R5, UCard.R6].
+   * @return the UCards associated with this WinningHand
+   */
   public List<UCard> unsuitedCardList() {
     return unsuitedCardList;
   }
 
+  /**
+   * The number of points associated with this WinningHand.
+   * @return the number of points associated with this WinningHand
+   */
   public int points() {
     return points;
   }

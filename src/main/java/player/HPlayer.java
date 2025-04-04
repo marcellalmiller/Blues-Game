@@ -6,7 +6,6 @@ import java.util.Optional;
 import game.deck.card.Card;
 import game.observer.EventType;
 
-// TODO: test
 /**
  * A human player in a Blues game. All non-void public methods' return values are obtained by
  *     calling IDisplay's methods, which read this player's input through a display.
@@ -61,6 +60,8 @@ public class HPlayer extends APlayer {
   /**
    * Calls and returns IDisplay's 'Optional<IPlayer> askNoBlues()' method (which gets this player's
    *     input through the display).
+   * @param opponents
+   * @param well
    * @return an opposing Player if this Player thinks that opponent is about to win, empty otherwise
    * @throws IllegalStateException if no display
    */
@@ -71,7 +72,11 @@ public class HPlayer extends APlayer {
   }
 
   //*************************************************************************************** OBSERVER
-  // TODO: javadoc
+  /**
+   * 'HumanPlayer's never use 'IMemory', so this method is empty.
+   * @param event the 'EventType'
+   * @param data the event's data
+   */
   @Override
   public void update(EventType event, List<Object> data) {
   }

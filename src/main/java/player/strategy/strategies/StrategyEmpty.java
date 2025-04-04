@@ -7,7 +7,6 @@ import java.util.Random;
 import game.deck.card.Card;
 import player.IPlayer;
 import player.strategy.Approach;
-import player.strategy.IStrategy;
 
 /**
  * A strategy that makes choices solely based on its 'Approach' and does not attempt to win.

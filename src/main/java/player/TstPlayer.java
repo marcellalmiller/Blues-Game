@@ -63,6 +63,11 @@ public class TstPlayer extends APlayer {
   }
 
   //************************************************************************************** OVERRIDES
+  /**
+   *
+   * @param well the four well cards to consider
+   * @return the 'Card' to discard
+   */
   @Override
   public Card discard(List<Card> well) {
     if (auto) {
@@ -79,6 +84,12 @@ public class TstPlayer extends APlayer {
     throw new IllegalStateException("No hand cards match the set discard card");
   }
 
+  /**
+   *
+   * @param pond the remaining pond cards
+   * @param well the remaining well cards
+   * @return the Card to choose
+   */
   @Override
   public Card chooseCard(List<Card> pond, List<Card> well) {
     if (auto) {
@@ -97,6 +108,12 @@ public class TstPlayer extends APlayer {
     throw new IllegalStateException("No well or pond cards match the set chooseCard card");
   }
 
+  /**
+   *
+   * @param opponents the opponents
+   * @param well the current well
+   * @return an opposing 'IPlayer' if this thinks that opponent is about to win, empty otherwise
+   */
   @Override
   public Optional<IPlayer> callNo(List<IPlayer> opponents, List<Card> well) {
     if (auto) {
@@ -109,6 +126,12 @@ public class TstPlayer extends APlayer {
   }
 
   //*************************************************************************************** OBSERVER
+  /**
+   * Called by instances of 'IGame' to notify 'Observer's of game events. This method passes its
+   *   arguments to 'dataListify' so they can be stored for testing purposes.
+   * @param event the EventType
+   * @param data the event's data
+   */
   @Override
   public void update(EventType event, List<Object> data) {
     dataListify(event, data);
@@ -124,28 +147,39 @@ public class TstPlayer extends APlayer {
   }
 
   //*********************************************************************************** AUTO = FALSE
-  // These three methods ('setDiscard', 'setChooseCard', and 'setCallNo') set overrode methods'
-  // return values individually. Calling any one of them sets field 'auto' to false.
-
+  /**
+   * Sets the next return value of 'discard'. Calling this method sets 'auto' to false.
+   * @param c the next return value of 'discard'
+   */
   public void setDiscard(Card c) {
     auto = false;
     this.discard = c;
   }
 
+  /**
+   * Sets the next return value of 'chooseCard'. Calling this method sets 'auto' to false.
+   * @param c the next return value of 'chooseCard'
+   */
   public void setChooseCard(Card c) {
     auto = false;
     this.chooseCard = c;
   }
 
+  /**
+   * Sets the next return value of 'callNo'. Calling this method sets 'auto' to false.
+   * @param p the next return value of 'callNo'
+   */
   public void setCallNo(Optional<IPlayer> p) {
     auto = false;
     this.callNo = p;
   }
 
   //************************************************************************************ AUTO = TRUE
-  // These three methods ('setWillDiscard', 'setWillChoose', and 'setWillCall') set overrode methods'
-  // return values in bulk. Calling any one of them sets field 'auto' to true.
-
+  /**
+   * Sets the return values of 'discard' in bulk. Values of argument 'willDiscard' are returned by
+   *   'discard' as long as 'auto' is true. Calling this method sets 'auto' to true.
+   * @param willDiscard
+   */
   public void setWillDiscard(List<Card> willDiscard) {
     auto = true;
     this.willDiscard = willDiscard;
@@ -153,6 +187,11 @@ public class TstPlayer extends APlayer {
     all3 = new ArrayList<>();
   }
 
+  /**
+   * Sets the return values of 'chooseCard' in bulk. Values of argument 'willChoose' are returned by
+   *   'chooseCard' as long as 'auto' is true. Calling this method sets 'auto' to true.
+   * @param willChoose
+   */
   public void setWillChoose(List<Card> willChoose) {
     auto = true;
     this.willChoose = willChoose;
@@ -160,6 +199,11 @@ public class TstPlayer extends APlayer {
     all3 = new ArrayList<>();
   }
 
+  /**
+   * Sets the return values of 'callNo' in bulk. Values of argument 'willCall' are returned by
+   *   'callNo' as long as 'auto' is true. Calling this method sets 'auto' to true.
+   * @param willCall
+   */
   public void setWillCall(List<Optional<IPlayer>> willCall) {
     auto = true;
     this.willCall = willCall;
@@ -183,14 +227,23 @@ public class TstPlayer extends APlayer {
     }
   }
 
-  // TODO: javadoc
+  /**
+   * Resets fields that record notifications received by the 'update' method inherited from the
+   *   'Observer' interface.
+   */
   private void resetObsObservers() {
     dataStrings = new ArrayList<>();
     datas = new ArrayList<>();
     events = new ArrayList<>();
   }
 
-  // TODO: javadoc
+  /**
+   * Converts the notifications received by the 'update' method inherited from the 'Observer'
+   *   interface to Strings and stores them in field 'dataStrings' for testing purposes. Also stores
+   *   arguments 'events' and 'data'.
+   * @param event the EventType
+   * @param data the event's data
+   */
   private void dataListify(EventType event, List<Object> data) {
     events.add(event);
     datas.add(data);

@@ -14,7 +14,7 @@ import player.IPlayer;
 
 /**
  * Useful methods and constants whose values are integral to the rules of the game and will
- * therefore never change.
+ *   never change.
  */
 public class Utility {
 
@@ -305,7 +305,7 @@ public class Utility {
   }
 
   /**
-   * Returns true if cards is consecutive (1, 2, 3, 4, 5, or 2, 3, 4, 5, 6, or 3, 4, 5, 6, 7).
+   * Returns true if cards are consecutive (1, 2, 3, 4, 5, or 2, 3, 4, 5, 6, or 3, 4, 5, 6, 7).
    * @param cards the list of cards to check
    * @return true if cards is consecutive
    */
