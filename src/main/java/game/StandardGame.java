@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Random;
 
 import game.deck.IDeck;
 import game.deck.card.Card;
@@ -246,7 +247,7 @@ public class StandardGame implements IGame {
   //**************************************************************************************** GETTERS
   @Override
   public boolean gameOver() {
-    return totalGamePoints >= players.size() * 25;
+    return totalGamePoints >= players.size() * 100;
   }
 
   @Override
@@ -597,6 +598,9 @@ public class StandardGame implements IGame {
         }
       }
     }
+
+    Random random = new Random();
+    gameWinner = tied.get(random.nextInt(tied.size()));
 
     if (gameWinner == null) {
       throw new IllegalStateException("Set game winner unsuccessful");

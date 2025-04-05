@@ -26,7 +26,7 @@ import player.strategy.strategies.StrategyWinProb;
 import player.strategy.strategies.StrategyWinProbMem;
 import utility.SheetsServiceUtil;
 
-public class GoogleSheetsStrategyTests {
+public class SheetsRandomStrategyTests {
   IGame g;
   public TypeDeck deck = new TypeDeck(DeckType.STANDARD);
   List<IPlayer> players;
