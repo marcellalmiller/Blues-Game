@@ -72,7 +72,7 @@ public class StandardGame implements IGame {
     for (IPlayer p : players) {
       if (Utility.isBlues(p.getHand())) {
         rendState = Optional.of(new REndState(REnd.BLUES, p));
-        bluesEnd(); // TODO: all ends need to update observers
+        bluesEnd();
       }
     }
   }

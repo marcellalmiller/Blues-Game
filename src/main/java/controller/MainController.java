@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Objects;
 
 import display.IDisplay;
-import display.TerminalDisplay;
 import display.TextDisplay;
 import game.IGame;
 import game.StandardGame;
@@ -50,15 +49,19 @@ public class MainController implements IController {
   private void play() {
     boolean repeat = true;
     while (repeat) {
-      runGame();
+      runRound();
+      System.out.println("runRound() completed (line 53)");
+      game.resetNewGame();
+      System.out.println("resetNewGame() called (line 55)");
       repeat = display.askPlayAgain();
+      System.out.println("askPlayAgain() called (line 57)");
     }
   }
 
-  private void runGame() {
+  private void runRound() {
     game.startRound();
     while (!game.roundOver()) runTurn();
-    if (!game.gameOver()) runGame();
+    if (!game.gameOver()) runRound();
   }
 
   private void runTurn() {

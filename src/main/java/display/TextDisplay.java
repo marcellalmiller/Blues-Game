@@ -142,6 +142,8 @@ public class TextDisplay implements IDisplay, Observer {
   @Override
   public Card askDiscard() {
     throwIfNullFields();
+    scoreText.setText(game.getScoreSheet().htmlToString());
+
     List<Character> charIdx = List.of('A', 'B', 'C', 'D', 'E');
     String ogMessage = "<html>Choose a card to discard from your hand by entering its<br>corresponding "
             + "letter<br><br>" + cardChoiceString(player.getHand(), charIdx);
@@ -149,7 +151,6 @@ public class TextDisplay implements IDisplay, Observer {
 
     char answer = getValidInput(charIdx);
     gameText.setText(this.toString());
-    scoreText.setText(game.getScoreSheet().htmlToString());
 
     return player.getHand().get(charIdx.indexOf(answer));
   }

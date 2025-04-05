@@ -178,7 +178,7 @@ public class ScoreSheet {
     sb.append("|-------|").append("----------|".repeat(order.length)).append("|----------|<br>");
 
     for (RScore r : sheet) {
-      sb.append(r.ssToString()).append("<br>");
+      sb.append(r.ssToString());
     }
 
     sb.append("‾‾‾‾‾‾‾‾‾‾").append("‾‾‾‾‾‾‾‾‾‾‾".repeat(order.length + 1));
